@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BusinessLayer.Service
 {
-    public class UserBusiness : IUserBusiness
+    public class UserBusiness : IUserBusiness 
     {
         private readonly IUserRepository _userRepository;
 
@@ -30,6 +30,12 @@ namespace BusinessLayer.Service
         public ResponseData UserLogin(LoginRequest login)
         {
             ResponseData responseData = _userRepository.UserLogin(login);
+            return responseData;
+        }
+
+        public ResponseData ForgotPassword(ForgotPasswordRequest forgotPassword)
+        {
+            ResponseData responseData = _userRepository.ForgotPassword(forgotPassword);
             return responseData;
         }
     }

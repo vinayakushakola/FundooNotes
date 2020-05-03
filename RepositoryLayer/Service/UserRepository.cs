@@ -105,5 +105,33 @@ namespace RepositoryLayer.Service
                 throw new Exception(ex.Message);
             }
         }
+
+        public ResponseData ForgotPassword(ForgotPasswordRequest forgotPassword)
+        {
+            try
+            {
+                ResponseData responseData = null;
+                var users = _context.Users;
+                foreach (UserInfo user in users)
+                {
+                    if (user.Email == forgotPassword.Email)
+                    {
+                        responseData = new ResponseData()
+                        {
+                            ID = user.ID,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Email = user.Email
+                        };
+                    }
+                }
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

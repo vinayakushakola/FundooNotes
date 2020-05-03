@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
@@ -101,14 +102,73 @@ namespace Fundoo.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("ForgotPassword")]
+        public IActionResult ForgotPassword(ForgotPasswordRequest forgotPassword)
+        {
+            try
+            {
+                ResponseData data = _userBusiness.ForgotPassword(forgotPassword);
+
+                bool success = false;
+                string message, userFullName, jsonToken;
+
+                if (data == null)
+                {
+                    message = "No User Found with that Email: " + forgotPassword.Email;
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    success = true;
+                    jsonToken = CreateToken(data, "ForgotPassword");
+
+                    MailMessage mail = new MailMessage();
+                    SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+                    mail.From = new MailAddress("vinayak.mailtesting@gmail.com");
+                    mail.To.Add(forgotPassword.Email);
+                    mail.Subject = "Reset Password";
+                    mail.Body = "Hi, You Requested for password reset! \n\nUse this token for Password reset!\n\nToken: " + jsonToken;
+
+                    SmtpServer.Port = 587;
+                    SmtpServer.Credentials = new System.Net.NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");
+                    SmtpServer.EnableSsl = true;
+
+                    SmtpServer.Send(mail);
+
+                    userFullName = data.FirstName + " " + data.LastName;
+                    message = "The mail has been sent to " + forgotPassword.Email + " Successfully";
+
+                    return Ok(new { success, message, data, jsonToken });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(int id)
+        {
+            return "value";
+        }
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
+        [HttpPut("{id}")]
+        public void Put(int id, string value)
+        {
+        }
+
         public string CreateToken(ResponseData responseData, string type)
         {
             try
             {
-                // Symmetric Security key
                 var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
 
-                // Signing credentials
                 var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
 
                 var claims = new List<Claim>();
@@ -116,8 +176,6 @@ namespace Fundoo.Controllers
                 claims.Add(new Claim("ID", responseData.ID.ToString()));
                 claims.Add(new Claim("email", responseData.Email.ToString()));
 
-
-                // Create Token
                 var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                     _config["Jwt:Issuer"],
                     claims,
