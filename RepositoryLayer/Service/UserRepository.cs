@@ -4,6 +4,7 @@ using CommonLayer.ResponseModels;
 using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace RepositoryLayer.Service
 {
@@ -14,6 +15,32 @@ namespace RepositoryLayer.Service
         public UserRepository(AppDbContext context)
         {
             _context = context;
+        }
+
+        public List<ResponseData> GetUsersData()
+        {
+            try
+            {
+                var usersList = new List<ResponseData>();
+                ResponseData responseData = null;
+                var users = _context.Users;
+                foreach (UserInfo user in users)
+                {
+                    responseData = new ResponseData()
+                    {
+                        ID = user.ID,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email
+                    };
+                    usersList.Add(responseData);
+                }
+                return usersList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public ResponseData CreateAccount(SignUpRequest userSignUp)

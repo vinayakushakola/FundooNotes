@@ -1,5 +1,6 @@
 ﻿using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
+using System.Collections.Generic;
 
 namespace BusinessLayer.Interface
 {
@@ -8,5 +9,7 @@ namespace BusinessLayer.Interface
         ResponseData CreateAccount(SignUpRequest userSignUp);
 
         ResponseData UserLogin(LoginRequest login);
+
+        List<ResponseData> GetUsersData();
     }
 }

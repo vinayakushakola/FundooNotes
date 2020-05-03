@@ -11,5 +11,7 @@ namespace RepositoryLayer.Interface
         ResponseData CreateAccount(SignUpRequest userSignUp);
 
         ResponseData UserLogin(LoginRequest login);
+
+        List<ResponseData> GetUsersData();
     }
 }

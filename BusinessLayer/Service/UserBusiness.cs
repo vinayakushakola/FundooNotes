@@ -2,6 +2,7 @@
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
 using RepositoryLayer.Interface;
+using System.Collections.Generic;
 
 namespace BusinessLayer.Service
 {
@@ -13,6 +14,13 @@ namespace BusinessLayer.Service
         {
             _userRepository = userRepository;
         }
+
+        public List<ResponseData> GetUsersData()
+        {
+            List<ResponseData> usersList = _userRepository.GetUsersData();
+            return usersList;
+        }
+
         public ResponseData CreateAccount(SignUpRequest userSignUp)
         {
             ResponseData responseData = _userRepository.CreateAccount(userSignUp);
