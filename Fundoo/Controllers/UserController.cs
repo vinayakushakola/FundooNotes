@@ -17,6 +17,7 @@ namespace Fundoo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[ApiExplorerSettings(IgnoreApi = true)]
     public class UserController : ControllerBase
     {
         private readonly IUserBusiness _userBusiness;
@@ -149,21 +150,7 @@ namespace Fundoo.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-        [HttpPut("{id}")]
-        public void Put(int id, string value)
-        {
-        }
-
-        public string CreateToken(ResponseData responseData, string type)
+        private string CreateToken(ResponseData responseData, string type)
         {
             try
             {
