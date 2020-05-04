@@ -12,6 +12,8 @@ using Microsoft.OpenApi.Models;
 using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Service;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -50,6 +52,30 @@ namespace Fundoo
             {
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Fundoo API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Write Bearer space & paste your token"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+
+                    }
+                });
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
