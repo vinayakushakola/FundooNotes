@@ -17,7 +17,6 @@ namespace Fundoo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[ApiExplorerSettings(IgnoreApi = true)]
     public class UserController : ControllerBase
     {
         private readonly IUserBusiness _userBusiness;
@@ -45,6 +44,37 @@ namespace Fundoo.Controllers
             }
         }
 
+        [Authorize(Roles = "ForgotPassword")]
+        [HttpPost]
+        [Route("ResetPassword")]
+        public ActionResult ResetPassword(ResetPasswordRequest resetPasswordRequest)
+        {
+            try
+            {
+                bool success = false;
+                string message, userFullName;
+                var idClaim = User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                ResponseData data = _userBusiness.ResetPassword(Convert.ToInt32(idClaim.Value), resetPasswordRequest);
+                if (data == null)
+                {
+                    message = "No Data Found";
+                    return NotFound(new { success, message });
+                }
+                else
+                {
+                    success = true;
+                    userFullName = data.FirstName + " " + data.LastName;
+                    message = "Hello " + userFullName + ", Your Account Password Changed Successfully";
+                    return Ok(new { success, message, data });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
         [HttpPost]
         [Route("SignUp")]
         public IActionResult CreateAccount(SignUpRequest signUpRequest)
@@ -57,7 +87,7 @@ namespace Fundoo.Controllers
                 if (data == null)
                 {
                     message = "Enter Valid Details!";
-                    return Ok(new { success, message });
+                    return NotFound(new { success, message });
                 }
                 else
                 {
@@ -86,7 +116,7 @@ namespace Fundoo.Controllers
                 if (data == null)
                 {
                     message = "Enter Valid Email & Password";
-                    return Ok(new { success, message });
+                    return NotFound(new { success, message });
                 }
                 else
                 {
@@ -161,7 +191,7 @@ namespace Fundoo.Controllers
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Role, type));
                 claims.Add(new Claim("ID", responseData.ID.ToString()));
-                claims.Add(new Claim("email", responseData.Email.ToString()));
+                claims.Add(new Claim("Email", responseData.Email.ToString()));
 
                 var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                     _config["Jwt:Issuer"],

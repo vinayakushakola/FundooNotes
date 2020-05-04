@@ -5,6 +5,7 @@ using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RepositoryLayer.Service
 {
@@ -36,6 +37,32 @@ namespace RepositoryLayer.Service
                     usersList.Add(responseData);
                 }
                 return usersList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public ResponseData ResetPassword(int id, ResetPasswordRequest resetPasswordRequest)
+        {
+            try
+            {
+                ResponseData responseData = null;
+
+                var user = _context.Users.First(userID => userID.ID == id);
+                string newPassword = EncryptionDecryption.Encryption(resetPasswordRequest.NewPassword);
+                user.Password = newPassword;
+                _context.SaveChanges();
+
+                responseData = new ResponseData()
+                {
+                    ID = user.ID,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                };
+                return responseData;
             }
             catch (Exception ex)
             {

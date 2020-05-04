@@ -21,6 +21,13 @@ namespace BusinessLayer.Service
             return usersList;
         }
 
+        public ResponseData ResetPassword(int id, ResetPasswordRequest resetPasswordRequest)
+        {
+            ResponseData responseData = _userRepository.ResetPassword(id, resetPasswordRequest);
+            return responseData;
+        }
+
+
         public ResponseData CreateAccount(SignUpRequest userSignUp)
         {
             ResponseData responseData = _userRepository.CreateAccount(userSignUp);

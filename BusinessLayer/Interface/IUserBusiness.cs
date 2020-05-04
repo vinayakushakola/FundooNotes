@@ -13,5 +13,7 @@ namespace BusinessLayer.Interface
         List<ResponseData> GetUsersData();
 
         ResponseData ForgotPassword(ForgotPasswordRequest forgotPassword);
+
+        ResponseData ResetPassword(int id, ResetPasswordRequest newPassword);
     }
 }
