@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RepositoryLayer.Interface
+﻿namespace RepositoryLayer.Interface
 {
-    interface IUserNotesRepository
+    public interface IUserNotesRepository
     {
+        UserNotesResponseData
     }
 }
