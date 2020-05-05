@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.ApplicationDbContext;
 
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200505054137_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,39 +46,6 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CommonLayer.Models.UserNotesInfo", b =>
-                {
-                    b.Property<int>("NotesId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Archived");
-
-                    b.Property<string>("Color");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Image");
-
-                    b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<string>("Notes");
-
-                    b.Property<bool>("Pin");
-
-                    b.Property<DateTime>("Reminder");
-
-                    b.Property<string>("Title");
-
-                    b.Property<bool>("Trash");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("NotesId");
-
-                    b.ToTable("UserNotes");
                 });
 #pragma warning restore 612, 618
         }

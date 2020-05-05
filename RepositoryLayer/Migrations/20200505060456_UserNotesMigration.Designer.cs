@@ -10,8 +10,8 @@ using RepositoryLayer.ApplicationDbContext;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200503074313_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200505060456_UserNotesMigration")]
+    partial class UserNotesMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,39 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CommonLayer.Models.UserNotesInfo", b =>
+                {
+                    b.Property<int>("NotesId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Archived");
+
+                    b.Property<string>("Color");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Image");
+
+                    b.Property<DateTime>("ModifiedDate");
+
+                    b.Property<string>("Notes");
+
+                    b.Property<bool>("Pin");
+
+                    b.Property<DateTime>("Reminder");
+
+                    b.Property<string>("Title");
+
+                    b.Property<bool>("Trash");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("NotesId");
+
+                    b.ToTable("UserNotes");
                 });
 #pragma warning restore 612, 618
         }
