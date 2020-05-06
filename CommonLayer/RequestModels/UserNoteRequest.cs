@@ -1,11 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
-namespace CommonLayer.ResponseModels
+namespace CommonLayer.RequestModels
 {
-    public class UserNotesResponseData
+    public class UserNoteRequest
     {
-        public int NoteId { set; get; }
-
         public string Title { set; get; }
 
         public string Notes { set; get; }
@@ -22,5 +21,7 @@ namespace CommonLayer.ResponseModels
 
         [DefaultValue(false)]
         public bool Trash { set; get; }
+
+        public DateTime Reminder { get; set; }
     }
 }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 
-namespace CommonLayer.RequestModels
+namespace CommonLayer.ResponseModels
 {
-    public class NotesRequest
+    public class UserNoteResponseData
     {
+        public int NoteId { set; get; }
+
         public string Title { set; get; }
 
         public string Notes { set; get; }
