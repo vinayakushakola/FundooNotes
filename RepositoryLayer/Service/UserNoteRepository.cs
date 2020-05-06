@@ -54,5 +54,23 @@ namespace RepositoryLayer.Service
                 throw new Exception(ex.Message);
             }
         }
+
+        public string DeleteNote(int noteID)
+        {
+            try
+            {
+                _context.UserNotes.Remove(_context.UserNotes.Find(noteID));
+                _context.SaveChanges();
+
+                var userNotes = _context.UserNotes;
+                string data = "Notes Deleted Successfully";
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

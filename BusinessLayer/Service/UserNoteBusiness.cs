@@ -18,5 +18,12 @@ namespace BusinessLayer.Service
             UserNoteResponseData userNoteResponseData = _userNoteRepository.CreateNote(userID, userNotes);
             return userNoteResponseData;
         }
+
+        public string DeleteNote(int noteID)
+        {
+            string userNoteResponseData = _userNoteRepository.DeleteNote(noteID);
+            return userNoteResponseData;
+        }
+
     }
 }
