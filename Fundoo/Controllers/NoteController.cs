@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessLayer.Interface;
+﻿using BusinessLayer.Interface;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryLayer.Interface;
+using System;
+using System.Linq;
 
 namespace Fundoo.Controllers
 {
@@ -52,5 +49,33 @@ namespace Fundoo.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
+
+        [HttpDelete]
+        [Route("DeleteNotes")]
+        public IActionResult DeleteNote(int noteID)
+        {
+            try
+            {
+                string data = _userNoteBusiness.DeleteNote(noteID);
+                bool success = false;
+                string message;
+                if (data == null)
+                {
+                    message = "Try again";
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    success = true;
+                    return Ok(new { success, data });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
     }
 }
