@@ -44,7 +44,7 @@ namespace Fundoo.Controllers
             }
         }
 
-        [Authorize(Roles = "ForgotPassword")]
+        [Authorize]
         [HttpPost]
         [Route("ResetPassword")]
         public ActionResult ResetPassword(ResetPasswordRequest resetPasswordRequest)
@@ -58,7 +58,7 @@ namespace Fundoo.Controllers
                 if (data == null)
                 {
                     message = "No Data Found";
-                    return NotFound(new { success, message });
+                    return Ok(new { success, message });
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace Fundoo.Controllers
                 if (data == null)
                 {
                     message = "Enter Valid Details!";
-                    return NotFound(new { success, message });
+                    return Ok(new { success, message });
                 }
                 else
                 {
@@ -116,7 +116,7 @@ namespace Fundoo.Controllers
                 if (data == null)
                 {
                     message = "Enter Valid Email & Password";
-                    return NotFound(new { success, message });
+                    return Ok(new { success, message });
                 }
                 else
                 {
