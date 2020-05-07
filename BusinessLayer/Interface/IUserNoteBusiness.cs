@@ -11,5 +11,8 @@ namespace BusinessLayer.Interface
         string DeleteNote(int noteID);
 
         List<UserNoteResponseData> GetAllUserNotes(int userID);
+
+        List<UserNoteResponseData> GetTrashedNotes(int userID);
+
     }
 }

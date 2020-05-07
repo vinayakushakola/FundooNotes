@@ -26,6 +26,12 @@ namespace BusinessLayer.Service
             return userNoteResponseData;
         }
 
+        public List<UserNoteResponseData> GetTrashedNotes(int userID)
+        {
+            List<UserNoteResponseData> userTrashedData = _userNoteRepository.GetTrashedNotes(userID);
+            return userTrashedData;
+        }
+
         public List<UserNoteResponseData> GetAllUserNotes(int userID)
         {
             List<UserNoteResponseData> userNoteResponseData = _userNoteRepository.GetAllUserNotes(userID);
