@@ -13,6 +13,8 @@ namespace RepositoryLayer.Interface
         List<UserNoteResponseData> GetAllUserNotes(int userID);
 
         List<UserNoteResponseData> GetTrashedNotes(int userID);
+        
+        List<UserNoteResponseData> GetArchievedNotes(int userID);
 
     }
 }

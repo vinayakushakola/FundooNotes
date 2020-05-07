@@ -106,6 +106,36 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public List<UserNoteResponseData> GetArchievedNotes(int userID)
+        {
+            try
+            {
+                List<UserNoteResponseData> userNoteLists = _context.UserNotes.
+                    Where(user => user.UserId == userID && user.Archived == true).
+                    Select(user => new UserNoteResponseData
+                    {
+                        NoteId = user.NotesId,
+                        Title = user.Title,
+                        Notes = user.Notes,
+                        Color = user.Color,
+                        Image = user.Image,
+                        Pin = user.Pin,
+                        Archived = user.Archived,
+                        Trash = user.Trash
+                    }).
+                    ToList();
+
+                if (userNoteLists == null)
+                {
+                    return null;
+                }
+                return userNoteLists;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public List<UserNoteResponseData> GetAllUserNotes(int userID)
         {
             try

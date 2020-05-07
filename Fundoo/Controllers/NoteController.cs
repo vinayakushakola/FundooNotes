@@ -104,6 +104,32 @@ namespace Fundoo.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetAllArchievedNotes")]
+        public IActionResult GetAllArchievedNotes()
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetArchievedNotes(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         [HttpGet]
         [Route("GetAllUserNotes")]

@@ -14,5 +14,7 @@ namespace BusinessLayer.Interface
 
         List<UserNoteResponseData> GetTrashedNotes(int userID);
 
+        List<UserNoteResponseData> GetArchievedNotes(int userID);
+
     }
 }
