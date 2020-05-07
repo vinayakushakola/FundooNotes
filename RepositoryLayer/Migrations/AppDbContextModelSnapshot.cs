@@ -66,7 +66,7 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<bool>("Pin");
 
-                    b.Property<DateTime>("Reminder");
+                    b.Property<DateTime?>("Reminder");
 
                     b.Property<string>("Title");
 

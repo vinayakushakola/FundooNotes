@@ -12,7 +12,7 @@ namespace RepositoryLayer.ApplicationDbContext
         }
 
         public DbSet<UserInfo> Users { get; set; }
-        
+
         public DbSet<UserNotesInfo> UserNotes { get; set; }
     }
 }

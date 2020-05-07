@@ -31,7 +31,7 @@ namespace CommonLayer.Models
         [DefaultValue(false)]
         public bool Trash { get; set; }
 
-        public DateTime Reminder { get; set; }
+        public DateTime? Reminder { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

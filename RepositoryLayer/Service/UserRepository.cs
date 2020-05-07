@@ -1,6 +1,4 @@
-﻿
-
-using CommonLayer.Models;
+﻿using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
 using RepositoryLayer.ApplicationDbContext;
@@ -24,21 +22,17 @@ namespace RepositoryLayer.Service
         {
             try
             {
-                var usersList = new List<ResponseData>();
-                ResponseData responseData = null;
-                var users = _context.Users;
-                foreach (UserInfo user in users)
-                {
-                    responseData = new ResponseData()
+                List<ResponseData> userLists = _context.Users.
+                    Where(user => user.ID>0).
+                    Select(user => new ResponseData
                     {
                         ID = user.ID,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Email = user.Email
-                    };
-                    usersList.Add(responseData);
-                }
-                return usersList;
+                    }).
+                    ToList();
+                return userLists;
             }
             catch (Exception ex)
             {
@@ -111,21 +105,18 @@ namespace RepositoryLayer.Service
             try
             {
                 ResponseData responseData = null;
-                var users = _context.Users;
                 string encryptedPassword = EncryptionDecryption.Encryption(login.Password);
+                var userData = _context.Users.FirstOrDefault(user => user.Email == login.Email && user.Password == encryptedPassword);
 
-                foreach (UserInfo user in users)
+                if (userData != null)
                 {
-                    if (user.Email == login.Email && user.Password == encryptedPassword)
+                    responseData = new ResponseData()
                     {
-                        responseData = new ResponseData()
-                        {
-                            ID = user.ID,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            Email = user.Email
-                        };
-                    }
+                        ID = userData.ID,
+                        FirstName = userData.FirstName,
+                        LastName = userData.LastName,
+                        Email = userData.Email
+                    };
                 }
                 return responseData;
             }
@@ -140,19 +131,16 @@ namespace RepositoryLayer.Service
             try
             {
                 ResponseData responseData = null;
-                var users = _context.Users;
-                foreach (UserInfo user in users)
+                var userData = _context.Users.FirstOrDefault(user => user.Email == forgotPassword.Email);
+                if (userData != null)
                 {
-                    if (user.Email == forgotPassword.Email)
+                    responseData = new ResponseData()
                     {
-                        responseData = new ResponseData()
-                        {
-                            ID = user.ID,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            Email = user.Email
-                        };
-                    }
+                        ID = userData.ID,
+                        FirstName = userData.FirstName,
+                        LastName = userData.LastName,
+                        Email = userData.Email
+                    };
                 }
                 return responseData;
             }
