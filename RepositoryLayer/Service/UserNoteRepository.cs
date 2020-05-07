@@ -1,9 +1,12 @@
 ﻿using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
+using Remotion.Linq.Parsing;
 using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RepositoryLayer.Service
 {
@@ -72,5 +75,36 @@ namespace RepositoryLayer.Service
             }
         }
 
+
+        public List<UserNoteResponseData> GetAllUserNotes(int userID)
+        {
+            try
+            {
+                List<UserNoteResponseData> userNoteLists = _context.UserNotes.
+                    Where(user => user.UserId == userID).
+                    Select(user => new UserNoteResponseData
+                    {
+                        NoteId = user.NotesId,
+                        Title = user.Title,
+                        Notes = user.Notes,
+                        Color = user.Color,
+                        Image = user.Image,
+                        Pin = user.Pin,
+                        Archived = user.Archived,
+                        Trash = user.Trash
+                    }).
+                    ToList();
+
+                if (userNoteLists == null)
+                {
+                    return null;
+                }
+                return userNoteLists;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

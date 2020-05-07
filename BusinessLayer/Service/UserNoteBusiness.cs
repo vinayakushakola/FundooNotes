@@ -2,6 +2,7 @@
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
 using RepositoryLayer.Interface;
+using System.Collections.Generic;
 
 namespace BusinessLayer.Service
 {
@@ -24,6 +25,13 @@ namespace BusinessLayer.Service
             string userNoteResponseData = _userNoteRepository.DeleteNote(noteID);
             return userNoteResponseData;
         }
+
+        public List<UserNoteResponseData> GetAllUserNotes(int userID)
+        {
+            List<UserNoteResponseData> userNoteResponseData = _userNoteRepository.GetAllUserNotes(userID);
+            return userNoteResponseData;
+        }
+
 
     }
 }

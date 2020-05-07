@@ -4,7 +4,9 @@ using CommonLayer.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Fundoo.Controllers
@@ -76,6 +78,30 @@ namespace Fundoo.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetAllUserNotes")]
+        public IActionResult GetAllUserNotes()
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
 
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetAllUserNotes(userId);
+
+                if(userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

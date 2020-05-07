@@ -1,5 +1,6 @@
 ﻿using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
+using System.Collections.Generic;
 
 namespace RepositoryLayer.Interface
 {
@@ -8,5 +9,7 @@ namespace RepositoryLayer.Interface
         UserNoteResponseData CreateNote(int userID, UserNoteRequest userNotes);
 
         string DeleteNote(int noteID);
+
+        List<UserNoteResponseData> GetAllUserNotes(int userID);
     }
 }
