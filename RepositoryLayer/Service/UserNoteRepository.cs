@@ -80,8 +80,10 @@ namespace RepositoryLayer.Service
         {
             try
             {
+                var userNoteInfo = _context.UserNotes;
+
                 List<UserNoteResponseData> userNoteLists = _context.UserNotes.
-                    Where(user => user.UserId == userID).
+                    Where(user => user.UserId == userID && user.Archived != true && user.Trash != true).
                     Select(user => new UserNoteResponseData
                     {
                         NoteId = user.NotesId,
