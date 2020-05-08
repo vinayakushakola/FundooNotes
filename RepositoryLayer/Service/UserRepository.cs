@@ -1,6 +1,4 @@
-﻿
-
-using CommonLayer.Models;
+﻿using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
 using RepositoryLayer.ApplicationDbContext;
@@ -108,7 +106,9 @@ namespace RepositoryLayer.Service
             {
                 ResponseData responseData = null;
                 string encryptedPassword = EncryptionDecryption.Encryption(login.Password);
-                var userData = _context.Users.FirstOrDefault(user => user.Email == login.Email && user.Password == encryptedPassword);
+                var userData = _context.Users.
+                    Where(user => user.Email == login.Email && user.Password == encryptedPassword)
+                    .FirstOrDefault<UserInfo>();
 
                 if (userData != null)
                 {
