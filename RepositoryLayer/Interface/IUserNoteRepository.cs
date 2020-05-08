@@ -10,6 +10,8 @@ namespace RepositoryLayer.Interface
 
         string DeleteNote(int noteID);
 
+        UserNoteResponseData UpdateNote(int userID, int noteID, UpdateNoteRequest updateNoteRequest);
+
         List<UserNoteResponseData> GetAllUserNotes(int userID);
 
         List<UserNoteResponseData> GetTrashedNotes(int userID);

@@ -4,11 +4,13 @@ using System.Collections.Generic;
 
 namespace BusinessLayer.Interface
 {
-    public interface IUserNoteBusiness
+    public interface IUserNoteBusiness 
     {
         UserNoteResponseData CreateNote(int userID, UserNoteRequest userNotes);
 
         string DeleteNote(int noteID);
+
+        UserNoteResponseData UpdateNote(int userID, int noteID, UpdateNoteRequest updateNoteRequest);
 
         List<UserNoteResponseData> GetAllUserNotes(int userID);
 

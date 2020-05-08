@@ -78,6 +78,36 @@ namespace Fundoo.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("UpdateNotes")]
+        public IActionResult UpdateNotes(int noteID, UpdateNoteRequest updateNoteRequest)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+                UserNoteResponseData userUpdateData = _userNoteBusiness.UpdateNote(userId, noteID, updateNoteRequest);
+                bool success = false;
+                string message;
+                if (userUpdateData == null)
+                {
+                    message = "Try again";
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    success = true;
+                    message = "Notes Updated Successfully";
+                    return Ok(new { success, message, userUpdateData });
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+
+            }
+        }
+
         [HttpGet]
         [Route("GetAllTrashedNotes")]
         public IActionResult GetAllTrashedNotes()
@@ -100,7 +130,7 @@ namespace Fundoo.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -126,7 +156,7 @@ namespace Fundoo.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -153,7 +183,7 @@ namespace Fundoo.Controllers
             }
             catch(Exception ex)
             {
-                throw new Exception(ex.Message);
+                return BadRequest(new { ex.Message });
             }
         }
     }
