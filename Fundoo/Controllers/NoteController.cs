@@ -160,6 +160,32 @@ namespace Fundoo.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetPinnedNotes")]
+        public IActionResult GetPinnedNotes()
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetPinnedNotes(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
 
         [HttpGet]
         [Route("GetAllUserNotes")]

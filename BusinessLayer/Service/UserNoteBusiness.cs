@@ -49,5 +49,12 @@ namespace BusinessLayer.Service
             UserNoteResponseData userNoteResponseData = _userNoteRepository.UpdateNote(userID, noteID, updateNoteRequest);
             return userNoteResponseData;
         }
+
+        public List<UserNoteResponseData> GetPinnedNotes(int userID)
+        {
+            List<UserNoteResponseData> userNoteResponseData = _userNoteRepository.GetPinnedNotes(userID);
+            return userNoteResponseData;
+        }
+
     }
 }

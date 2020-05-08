@@ -18,5 +18,7 @@ namespace RepositoryLayer.Interface
         
         List<UserNoteResponseData> GetArchievedNotes(int userID);
 
+        List<UserNoteResponseData> GetPinnedNotes(int userID);
+
     }
 }

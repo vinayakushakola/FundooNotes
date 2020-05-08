@@ -195,5 +195,36 @@ namespace RepositoryLayer.Service
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<UserNoteResponseData> GetPinnedNotes(int userID)
+        {
+            try
+            {
+                List<UserNoteResponseData> userNoteLists = _context.UserNotes.
+                    Where(user => user.UserId == userID && user.Pin == true).
+                    Select(user => new UserNoteResponseData
+                    {
+                        NoteId = user.NotesId,
+                        Title = user.Title,
+                        Notes = user.Notes,
+                        Color = user.Color,
+                        Image = user.Image,
+                        Pin = user.Pin,
+                        Archived = user.Archived,
+                        Trash = user.Trash
+                    }).
+                    ToList();
+
+                if (userNoteLists == null)
+                {
+                    return null;
+                }
+                return userNoteLists;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
