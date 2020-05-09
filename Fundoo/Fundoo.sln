@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fundoo", "Fundoo.csproj", "{1184F0BB-B26F-4AB4-A31A-1851D0757ECB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fundoo", "Fundoo.csproj", "{1184F0BB-B26F-4AB4-A31A-1851D0757ECB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "..\BusinessLayer\BusinessLayer.csproj", "{2EA4E169-46D3-46CC-A486-CD3E1E5C5F53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "..\BusinessLayer\BusinessLayer.csproj", "{2EA4E169-46D3-46CC-A486-CD3E1E5C5F53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLayer", "..\CommonLayer\CommonLayer.csproj", "{DBA07494-1379-4173-B8E2-645E731A2CBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLayer", "..\CommonLayer\CommonLayer.csproj", "{DBA07494-1379-4173-B8E2-645E731A2CBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryLayer", "..\RepositoryLayer\RepositoryLayer.csproj", "{00A3139F-C0BA-44F7-82EF-E4DF7862A3CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryLayer", "..\RepositoryLayer\RepositoryLayer.csproj", "{00A3139F-C0BA-44F7-82EF-E4DF7862A3CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

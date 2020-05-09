@@ -154,19 +154,7 @@ namespace Fundoo.Controllers
                     success = true;
                     jsonToken = CreateToken(data, "ForgotPassword");
 
-                    MailMessage mail = new MailMessage();
-                    SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-
-                    mail.From = new MailAddress("vinayak.mailtesting@gmail.com");
-                    mail.To.Add(forgotPassword.Email);
-                    mail.Subject = "Reset Password";
-                    mail.Body = "Hi, You Requested for password reset! \n\nUse this token for Password reset!\n\nToken: " + jsonToken;
-
-                    SmtpServer.Port = 587;
-                    SmtpServer.Credentials = new System.Net.NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");
-                    SmtpServer.EnableSsl = true;
-
-                    SmtpServer.Send(mail);
+                    SendMail(forgotPassword, jsonToken);
 
                     userFullName = data.FirstName + " " + data.LastName;
                     message = "The mail has been sent to " + forgotPassword.Email + " Successfully";
@@ -178,6 +166,23 @@ namespace Fundoo.Controllers
             {
                 return BadRequest(new { ex.Message });
             }
+        }
+
+        private void SendMail(ForgotPasswordRequest forgotPassword, string jsonToken)
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+            mail.From = new MailAddress("vinayak.mailtesting@gmail.com");
+            mail.To.Add(forgotPassword.Email);
+            mail.Subject = "Reset Password";
+            mail.Body = "Hi, You Requested for password reset! \n\nUse this token for Password reset!\n\nToken: " + jsonToken;
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");
+            SmtpServer.EnableSsl = true;
+
+            SmtpServer.Send(mail);
         }
 
         private string CreateToken(ResponseData responseData, string type)
