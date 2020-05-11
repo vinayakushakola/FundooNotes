@@ -44,15 +44,66 @@ namespace Fundoo.UnitTest
             var controller = new UserController(_userBusiness, _configuration);
             var newUserData = new SignUpRequest
             {
-                FirstName = "Somesh",
-                LastName = "Rawat",
-                Email = "Somesh1234@gmail.com",
-                Password = "Somesh1234",
+                FirstName = "Abcd",
+                LastName = "abcdef",
+                Email = "abcd1234@gmail.com",
+                Password = "Abcd1234",
             };
 
             var data = controller.CreateAccount(newUserData);
 
             Assert.IsType<OkObjectResult>(data);
+        }
+
+        [Fact]
+        public void SignUpUser_NoData_Return_BadRequest()
+        {
+            var controller = new UserController(_userBusiness, _configuration);
+            SignUpRequest newUserData = null;
+
+            var data = controller.CreateAccount(newUserData);
+
+            Assert.IsType<BadRequestObjectResult>(data);
+        }
+
+        
+
+        [Fact]
+        public void ForgotPassword_ValidEmailData_Return_OkResult()
+        {
+            var controller = new UserController(_userBusiness, _configuration);
+            var email = new ForgotPasswordRequest
+            {
+                Email = "SamKhan2@gmail.com"
+            };
+
+            var data = controller.ForgotPassword(email);
+
+            Assert.IsType<OkObjectResult>(data);
+
+        }
+
+        [Fact]
+        public void ForgotPassword_NoData_Return_BadRequest()
+        {
+            var controller = new UserController(_userBusiness, _configuration);
+            ForgotPasswordRequest forgotPassword = null;
+
+            var data = controller.ForgotPassword(forgotPassword);
+
+            Assert.IsType<BadRequestObjectResult>(data);
+
+        }
+
+        [Fact]
+        public void ResetPassword_NoData_Return_BadRequest()
+        {
+            var controller = new UserController(_userBusiness, _configuration);
+            ResetPasswordRequest resetPassword = null;
+
+            var data = controller.ResetPassword(resetPassword);
+
+            Assert.IsType<BadRequestObjectResult>(data);
         }
 
         [Fact]
