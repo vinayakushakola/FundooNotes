@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLayer", "..\CommonLay
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryLayer", "..\RepositoryLayer\RepositoryLayer.csproj", "{00A3139F-C0BA-44F7-82EF-E4DF7862A3CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fundoo.UnitTest", "..\Fundoo.UnitTest\Fundoo.UnitTest.csproj", "{08EF1A6C-19E0-49BB-ACC9-29CE28F5F1B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{00A3139F-C0BA-44F7-82EF-E4DF7862A3CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00A3139F-C0BA-44F7-82EF-E4DF7862A3CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00A3139F-C0BA-44F7-82EF-E4DF7862A3CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08EF1A6C-19E0-49BB-ACC9-29CE28F5F1B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08EF1A6C-19E0-49BB-ACC9-29CE28F5F1B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08EF1A6C-19E0-49BB-ACC9-29CE28F5F1B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08EF1A6C-19E0-49BB-ACC9-29CE28F5F1B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

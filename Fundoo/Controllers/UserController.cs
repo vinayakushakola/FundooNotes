@@ -30,7 +30,6 @@ namespace Fundoo.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult GetUsersData()
         {
             try
