@@ -39,7 +39,7 @@ namespace Fundoo.UnitTest
 
 
         [Fact]
-        public void Task_RegisterUser_Return_OkResult()
+        public void SignUpUser_Return_OkResult()
         {
             var controller = new UserController(_userBusiness, _configuration);
             var newUserData = new SignUpRequest
