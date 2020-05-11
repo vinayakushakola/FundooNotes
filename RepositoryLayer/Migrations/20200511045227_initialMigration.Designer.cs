@@ -10,8 +10,8 @@ using RepositoryLayer.ApplicationDbContext;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200511035636_LabelMigration")]
-    partial class LabelMigration
+    [Migration("20200511045227_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,8 +33,6 @@ namespace RepositoryLayer.Migrations
                         .IsRequired();
 
                     b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<int>("NoteID");
 
                     b.Property<int>("UserID");
 

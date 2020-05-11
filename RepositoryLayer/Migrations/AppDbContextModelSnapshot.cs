@@ -32,8 +32,6 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<DateTime>("ModifiedDate");
 
-                    b.Property<int>("NoteID");
-
                     b.Property<int>("UserID");
 
                     b.HasKey("LabelID");

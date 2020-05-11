@@ -13,9 +13,6 @@ namespace CommonLayer.Models
         [ForeignKey("UserInfo")]
         public int UserID { set; get; }
 
-        [ForeignKey("UserNotesInfo")]
-        public int NoteID { set; get; }
-
         [Required]
         public string LabelName { set; get; }
 

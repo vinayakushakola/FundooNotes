@@ -82,6 +82,8 @@ namespace Fundoo
             services.AddTransient<IUserBusiness, UserBusiness>();
             services.AddTransient<IUserNoteBusiness, UserNoteBusiness>();
             services.AddTransient<IUserNoteRepository, UserNoteRepository>();
+            services.AddTransient<ILabelBusiness, LabelBusiness>();
+            services.AddTransient<ILabelRepository, LabelRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
