@@ -10,8 +10,8 @@ using RepositoryLayer.ApplicationDbContext;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200511045227_initialMigration")]
-    partial class initialMigration
+    [Migration("20200512161610_IntialMigration")]
+    partial class IntialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,11 +80,11 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("Image");
 
                     b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<string>("Notes");
 
                     b.Property<bool>("Pin");
 

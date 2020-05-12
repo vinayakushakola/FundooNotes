@@ -78,11 +78,11 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("Image");
 
                     b.Property<DateTime>("ModifiedDate");
-
-                    b.Property<string>("Notes");
 
                     b.Property<bool>("Pin");
 

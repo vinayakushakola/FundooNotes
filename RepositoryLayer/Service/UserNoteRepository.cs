@@ -27,7 +27,7 @@ namespace RepositoryLayer.Service
                 {
                     UserId = userID,
                     Title = userNoteData.Title,
-                    Notes = userNoteData.Notes,
+                    Description = userNoteData.Description,
                     Color = userNoteData.Color,
                     Image = userNoteData.Image,
                     Pin = userNoteData.Pin,
@@ -44,7 +44,7 @@ namespace RepositoryLayer.Service
                 {
                     NoteId = userNote.NotesId,
                     Title = userNote.Title,
-                    Notes = userNote.Notes,
+                    Description = userNote.Description,
                     Color = userNote.Color,
                     Image = userNote.Image,
                     Pin = userNote.Pin,
@@ -67,14 +67,14 @@ namespace RepositoryLayer.Service
                 UserNoteResponseData userNoteResponseData = null;
                 var userData = _context.UserNotes.FirstOrDefault(user => user.UserId == userID && user.NotesId == noteID);
                 userData.Title = updateNoteRequest.Title;
-                userData.Notes = updateNoteRequest.Notes;
+                userData.Description = updateNoteRequest.Description;
                 _context.SaveChanges();
 
                 userNoteResponseData = new UserNoteResponseData()
                 {
                     NoteId = userData.NotesId,
                     Title = userData.Title,
-                    Notes = userData.Notes,
+                    Description = userData.Description,
                     Color = userData.Color,
                     Image = userData.Image,
                     Pin = userData.Pin,
@@ -104,7 +104,7 @@ namespace RepositoryLayer.Service
                 {
                     NoteId = userData.NotesId,
                     Title = userData.Title,
-                    Notes = userData.Notes,
+                    Description = userData.Description,
                     Color = userData.Color,
                     Image = userData.Image,
                     Pin = userData.Pin,
@@ -146,7 +146,7 @@ namespace RepositoryLayer.Service
                     {
                         NoteId = user.NotesId,
                         Title = user.Title,
-                        Notes = user.Notes,
+                        Description = user.Description,
                         Color = user.Color,
                         Image = user.Image,
                         Pin = user.Pin,
@@ -179,7 +179,7 @@ namespace RepositoryLayer.Service
                     {
                         NoteId = user.NotesId,
                         Title = user.Title,
-                        Notes = user.Notes,
+                        Description = user.Description,
                         Color = user.Color,
                         Image = user.Image,
                         Pin = user.Pin,
@@ -211,7 +211,7 @@ namespace RepositoryLayer.Service
                     {
                         NoteId = user.NotesId,
                         Title = user.Title,
-                        Notes = user.Notes,
+                        Description = user.Description,
                         Color = user.Color,
                         Image = user.Image,
                         Pin = user.Pin,
@@ -244,7 +244,7 @@ namespace RepositoryLayer.Service
                     {
                         NoteId = user.NotesId,
                         Title = user.Title,
-                        Notes = user.Notes,
+                        Description = user.Description,
                         Color = user.Color,
                         Image = user.Image,
                         Pin = user.Pin,

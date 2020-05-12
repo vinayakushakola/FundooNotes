@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class initialMigration : Migration
+    public partial class IntialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,7 +32,7 @@ namespace RepositoryLayer.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: true),
-                    Notes = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     Color = table.Column<string>(nullable: true),
                     Image = table.Column<string>(nullable: true),
                     Pin = table.Column<bool>(nullable: false),

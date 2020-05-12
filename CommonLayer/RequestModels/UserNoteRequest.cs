@@ -7,7 +7,7 @@ namespace CommonLayer.RequestModels
     {
         public string Title { set; get; }
 
-        public string Notes { set; get; }
+        public string Description { set; get; }
 
         public string Color { set; get; }
 
