@@ -29,6 +29,10 @@ namespace Fundoo.Controllers
             _config = config;
         }
 
+        /// <summary>
+        /// It shows all Register users
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult GetUsersData()
         {
@@ -43,37 +47,11 @@ namespace Fundoo.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPost]
-        [Route("ResetPassword")]
-        public ActionResult ResetPassword(ResetPasswordRequest resetPasswordRequest)
-        {
-            try
-            {
-                bool success = false;
-                string message, userFullName;
-                var idClaim = User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
-                ResponseData data = _userBusiness.ResetPassword(Convert.ToInt32(idClaim.Value), resetPasswordRequest);
-                if (data == null)
-                {
-                    message = "No Data Found";
-                    return Ok(new { success, message });
-                }
-                else
-                {
-                    success = true;
-                    userFullName = data.FirstName + " " + data.LastName;
-                    message = "Hello " + userFullName + ", Your Account Password Changed Successfully";
-                    return Ok(new { success, message, data });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-        }
-
-
+        /// <summary>
+        /// It is used for Registration
+        /// </summary>
+        /// <param name="signUpRequest">Sign Up Data</param>
+        /// <returns>It Returns response data</returns>
         [HttpPost]
         [Route("SignUp")]
         public IActionResult CreateAccount(SignUpRequest signUpRequest)
@@ -102,6 +80,11 @@ namespace Fundoo.Controllers
             }
         }
 
+        /// <summary>
+        /// It is used for Login
+        /// </summary>
+        /// <param name="login">login Data</param>
+        /// <returns>It return Response Data</returns>
         [HttpPost]
         [Route("Login")]
         public IActionResult UserLogin(LoginRequest login)
@@ -132,6 +115,11 @@ namespace Fundoo.Controllers
             }
         }
 
+        /// <summary>
+        /// ForgotPassword
+        /// </summary>
+        /// <param name="forgotPassword">Email</param>
+        /// <returns>It returns response data</returns>
         [HttpPost]
         [Route("ForgotPassword")]
         public IActionResult ForgotPassword(ForgotPasswordRequest forgotPassword)
@@ -167,6 +155,46 @@ namespace Fundoo.Controllers
             }
         }
 
+        /// <summary>
+        /// It is used for changing password
+        /// </summary>
+        /// <param name="resetPasswordRequest">Password</param>
+        /// <returns>It return response data</returns>
+        [Authorize]
+        [HttpPost]
+        [Route("Reset")]
+        public ActionResult ResetPassword(ResetPasswordRequest resetPasswordRequest)
+        {
+            try
+            {
+                bool success = false;
+                string message, userFullName;
+                var idClaim = User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                ResponseData data = _userBusiness.ResetPassword(Convert.ToInt32(idClaim.Value), resetPasswordRequest);
+                if (data == null)
+                {
+                    message = "No Data Found";
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    success = true;
+                    userFullName = data.FirstName + " " + data.LastName;
+                    message = "Hello " + userFullName + ", Your Account Password Changed Successfully";
+                    return Ok(new { success, message, data });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// It is used for sending mail to the user
+        /// </summary>
+        /// <param name="forgotPassword">Email</param>
+        /// <param name="jsonToken">token</param>
         private void SendMail(ForgotPasswordRequest forgotPassword, string jsonToken)
         {
             MailMessage mail = new MailMessage();
@@ -184,6 +212,12 @@ namespace Fundoo.Controllers
             SmtpServer.Send(mail);
         }
 
+        /// <summary>
+        /// It Create Token
+        /// </summary>
+        /// <param name="responseData">Response Data</param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private string CreateToken(ResponseData responseData, string type)
         {
             try

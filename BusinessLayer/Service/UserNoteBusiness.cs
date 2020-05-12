@@ -20,10 +20,21 @@ namespace BusinessLayer.Service
             return userNoteResponseData;
         }
 
-        public string DeleteNote(int noteID)
+        public UserNoteResponseData UpdateNote(int userID, int noteID, UpdateNoteRequest updateNoteRequest)
         {
-            string userNoteResponseData = _userNoteRepository.DeleteNote(noteID);
+            UserNoteResponseData userNoteResponseData = _userNoteRepository.UpdateNote(userID, noteID, updateNoteRequest);
             return userNoteResponseData;
+        }
+
+        public UserNoteResponseData UpdateReminder(int userID, int noteID, ReminderRequest reminder)
+        {
+            UserNoteResponseData responseData = _userNoteRepository.UpdateReminder(userID, noteID, reminder);
+            return responseData;
+        }
+        public bool DeleteNote(int noteID)
+        {
+            bool responseData = _userNoteRepository.DeleteNote(noteID);
+            return responseData;
         }
 
         public List<UserNoteResponseData> GetTrashedNotes(int userID)
@@ -44,11 +55,7 @@ namespace BusinessLayer.Service
             return userNoteResponseData;
         }
 
-        public UserNoteResponseData UpdateNote(int userID, int noteID, UpdateNoteRequest updateNoteRequest)
-        {
-            UserNoteResponseData userNoteResponseData = _userNoteRepository.UpdateNote(userID, noteID, updateNoteRequest);
-            return userNoteResponseData;
-        }
+
 
         public List<UserNoteResponseData> GetPinnedNotes(int userID)
         {
@@ -56,5 +63,22 @@ namespace BusinessLayer.Service
             return userNoteResponseData;
         }
 
+        public bool TrashNote(int userID, int noteID)
+        {
+            bool responseData = _userNoteRepository.TrashNote(userID, noteID);
+            return responseData;
+        }
+
+        public bool ArchievedUnarchievedNote(int userID, int noteID)
+        {
+            bool responseData = _userNoteRepository.ArchievedUnarchievedNote(userID, noteID);
+            return responseData;
+        }
+
+        public bool PinUnpinNote(int userID, int noteID)
+        {
+            bool responseData = _userNoteRepository.PinUnpinNote(userID, noteID);
+            return responseData;
+        }
     }
 }

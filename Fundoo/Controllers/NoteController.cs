@@ -4,7 +4,6 @@ using CommonLayer.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +22,13 @@ namespace Fundoo.Controllers
             _userNoteBusiness = userNoteBusiness;
         }
 
+        /// <summary>
+        /// It Creates Note
+        /// </summary>
+        /// <param name="userNoteData">Note Data</param>
+        /// <returns>If data found return 200Ok, else not found response or bad request</returns>
         [HttpPost]
-        [Route("CreateNotes")]
+        [Route("")]
         public IActionResult CreateNote(UserNoteRequest userNoteData)
         {
             try
@@ -52,24 +56,35 @@ namespace Fundoo.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("DeleteNotes")]
-        public IActionResult DeleteNote(int noteID)
+
+        /// <summary>
+        /// It is used to Trash Note
+        /// </summary>
+        /// <param name="noteID">Note ID</param>
+        /// <returns>If data found return 200ok, else NotFound response or BadRequest</returns>
+        [HttpPost]
+        [Route("{noteID}")]
+        public IActionResult TrashNote(int noteID)
         {
             try
             {
-                string data = _userNoteBusiness.DeleteNote(noteID);
-                bool success = false;
+                bool success = false, data;
                 string message;
-                if (data == null)
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userID = Convert.ToInt32(idClaim.Value);
+
+                data = _userNoteBusiness.TrashNote(userID, noteID);
+
+                if (data)
                 {
-                    message = "Try again";
-                    return Ok(new { success, message });
+                    success = true;
+                    message = "Note Successfully Trashed";
+                    return Ok(new { success, message, data });
                 }
                 else
                 {
-                    success = true;
-                    return Ok(new { success, data });
+                    message = "Note Trash Unsuccessfull, Try again!";
+                    return Ok(new { success, message });
                 }
             }
             catch (Exception ex)
@@ -78,8 +93,87 @@ namespace Fundoo.Controllers
             }
         }
 
+        /// <summary>
+        /// It is used to Archieve Note
+        /// </summary>
+        /// <param name="noteID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("{noteID}/Archieve")]
+        public IActionResult ArchievedNote(int noteID)
+        {
+            try
+            {
+                bool success = false, data;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userID = Convert.ToInt32(idClaim.Value);
+
+                data = _userNoteBusiness.ArchievedUnarchievedNote(userID, noteID);
+
+                if (data)
+                {
+                    success = true;
+                    message = "Note Successfully Archieved";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "Note Archieved Unsuccessfull, Try again!";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// It is used to Pin note
+        /// </summary>
+        /// <param name="noteID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("{noteID}/Pin")]
+        public IActionResult PinNote(int noteID)
+        {
+            try
+            {
+                bool success = false, data;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userID = Convert.ToInt32(idClaim.Value);
+
+                data = _userNoteBusiness.PinUnpinNote(userID, noteID);
+
+                if (data)
+                {
+                    success = true;
+                    message = "Note Successfully Pinned";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "Note pinned Unsuccessfull, Try again!";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// It Update Note
+        /// </summary>
+        /// <param name="noteID">Note ID</param>
+        /// <param name="updateNoteRequest">Update Note Data</param>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         [HttpPut]
-        [Route("UpdateNotes")]
+        [Route("{noteID}")]
         public IActionResult UpdateNotes(int noteID, UpdateNoteRequest updateNoteRequest)
         {
             try
@@ -101,19 +195,127 @@ namespace Fundoo.Controllers
                     return Ok(new { success, message, userUpdateData });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { ex.Message });
 
             }
         }
 
+        /// <summary>
+        /// It is used to set Reminder
+        /// </summary>
+        /// <param name="noteID">Note ID</param>
+        /// <param name="reminder">Reminder</param>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        [HttpPut]
+        [Route("{noteID}/Reminder")]
+        public IActionResult AddReminder(int noteID, ReminderRequest reminder)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+                UserNoteResponseData userUpdateData = _userNoteBusiness.UpdateReminder(userId, noteID, reminder);
+                bool success = false;
+                string message;
+                if (userUpdateData == null)
+                {
+                    message = "Try again";
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    success = true;
+                    message = "Reminder Set Successfully";
+                    return Ok(new { success, message, userUpdateData });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+
+            }
+        }
+
+        /// <summary>
+        /// It Deletes Note Forever
+        /// </summary>
+        /// <param name="noteID">Note ID</param>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        [HttpDelete]
+        [Route("{noteID}")]
+        public IActionResult DeleteNote(int noteID)
+        {
+            try
+            {
+                bool data = _userNoteBusiness.DeleteNote(noteID);
+                bool success = false;
+                string message;
+                if (data)
+                {
+                    success = true;
+                    return Ok(new { success, data });
+                }
+                else
+                {
+                    message = "Try again";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// It shows all the notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         [HttpGet]
-        [Route("GetAllTrashedNotes")]
+        [Route("")]
+        public IActionResult GetAllUserNotes()
+        {
+            try
+            {
+                string message;
+                bool success = false;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetAllUserNotes(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    message = "Not found";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// It shows all Trashed notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        [HttpGet]
+        [Route("Trash")]
         public IActionResult GetAllTrashedNotes()
         {
             try
             {
+                bool success = false;
+                string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Convert.ToInt32(idClaim.Value);
 
@@ -125,7 +327,8 @@ namespace Fundoo.Controllers
                 }
                 else
                 {
-                    return Ok(userNoteResponseDataList.ToList());
+                    message = "No Trashed Notes";
+                    return Ok(new { success, message });
                 }
             }
             catch (Exception ex)
@@ -134,12 +337,18 @@ namespace Fundoo.Controllers
             }
         }
 
+        /// <summary>
+        /// It shows all Archieve notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         [HttpGet]
-        [Route("GetAllArchievedNotes")]
+        [Route("Archieve")]
         public IActionResult GetAllArchievedNotes()
         {
             try
             {
+                string message;
+                bool success = false;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Convert.ToInt32(idClaim.Value);
 
@@ -151,7 +360,8 @@ namespace Fundoo.Controllers
                 }
                 else
                 {
-                    return Ok(userNoteResponseDataList.ToList());
+                    message = "Not found";
+                    return Ok(new { success, message });
                 }
             }
             catch (Exception ex)
@@ -160,12 +370,18 @@ namespace Fundoo.Controllers
             }
         }
 
+        /// <summary>
+        /// It shows Pinned notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         [HttpGet]
-        [Route("GetPinnedNotes")]
+        [Route("Pin")]
         public IActionResult GetPinnedNotes()
         {
             try
             {
+                bool success = false;
+                string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Convert.ToInt32(idClaim.Value);
 
@@ -177,7 +393,8 @@ namespace Fundoo.Controllers
                 }
                 else
                 {
-                    return Ok(userNoteResponseDataList.ToList());
+                    message = "Not found";
+                    return Ok(new { success, message });
                 }
             }
             catch (Exception ex)
@@ -186,31 +403,5 @@ namespace Fundoo.Controllers
             }
         }
 
-
-        [HttpGet]
-        [Route("GetAllUserNotes")]
-        public IActionResult GetAllUserNotes()
-        {
-            try
-            {
-                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
-                int userId = Convert.ToInt32(idClaim.Value);
-
-                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetAllUserNotes(userId);
-
-                if(userNoteResponseDataList != null)
-                {
-                    return Ok(userNoteResponseDataList.ToList());
-                }
-                else
-                {
-                    return Ok(userNoteResponseDataList.ToList());
-                }
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-        }
     }
 }

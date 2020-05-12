@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessLayer.Interface;
+﻿using BusinessLayer.Interface;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace Fundoo.Controllers
 {
@@ -21,8 +19,13 @@ namespace Fundoo.Controllers
             _labelBusiness = labelBusiness;
         }
 
+        /// <summary>
+        /// It Creates Label
+        /// </summary>
+        /// <param name="labelRequest">Label Name</param>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         [HttpPost]
-        [Route("CreateLabel")]
+        [Route("")]
         public IActionResult CreateNote(LabelRequest labelRequest)
         {
             try

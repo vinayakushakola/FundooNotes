@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Fundoo</name>
+    </assembly>
+    <members>
+        <member name="M:Fundoo.Controllers.LabelController.CreateNote(CommonLayer.RequestModels.LabelRequest)">
+            <summary>
+            It Creates Label
+            </summary>
+            <param name="labelRequest">Label Name</param>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.CreateNote(CommonLayer.RequestModels.UserNoteRequest)">
+            <summary>
+            It Creates Note
+            </summary>
+            <param name="userNoteData">Note Data</param>
+            <returns>If data found return 200Ok, else not found response or bad request</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.TrashNote(System.Int32)">
+            <summary>
+            It is used to Trash Note
+            </summary>
+            <param name="noteID">Note ID</param>
+            <returns>If data found return 200ok, else NotFound response or BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.ArchievedNote(System.Int32)">
+            <summary>
+            It is used to Archieve Note
+            </summary>
+            <param name="noteID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.PinNote(System.Int32)">
+            <summary>
+            It is used to Pin note
+            </summary>
+            <param name="noteID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.UpdateNotes(System.Int32,CommonLayer.RequestModels.UpdateNoteRequest)">
+            <summary>
+            It Update Note
+            </summary>
+            <param name="noteID">Note ID</param>
+            <param name="updateNoteRequest">Update Note Data</param>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.AddReminder(System.Int32,CommonLayer.RequestModels.ReminderRequest)">
+            <summary>
+            It is used to set Reminder
+            </summary>
+            <param name="noteID">Note ID</param>
+            <param name="reminder">Reminder</param>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.DeleteNote(System.Int32)">
+            <summary>
+            It Deletes Note Forever
+            </summary>
+            <param name="noteID">Note ID</param>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllUserNotes">
+            <summary>
+            It shows all the notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllTrashedNotes">
+            <summary>
+            It shows all Trashed notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllArchievedNotes">
+            <summary>
+            It shows all Archieve notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetPinnedNotes">
+            <summary>
+            It shows Pinned notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.UserController.GetUsersData">
+            <summary>
+            It shows all Register users
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.UserController.CreateAccount(CommonLayer.RequestModels.SignUpRequest)">
+            <summary>
+            It is used for Registration
+            </summary>
+            <param name="signUpRequest">Sign Up Data</param>
+            <returns>It Returns response data</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.UserController.UserLogin(CommonLayer.RequestModels.LoginRequest)">
+            <summary>
+            It is used for Login
+            </summary>
+            <param name="login">login Data</param>
+            <returns>It return Response Data</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.UserController.ForgotPassword(CommonLayer.RequestModels.ForgotPasswordRequest)">
+            <summary>
+            ForgotPassword
+            </summary>
+            <param name="forgotPassword">Email</param>
+            <returns>It returns response data</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.UserController.ResetPassword(CommonLayer.RequestModels.ResetPasswordRequest)">
+            <summary>
+            It is used for changing password
+            </summary>
+            <param name="resetPasswordRequest">Password</param>
+            <returns>It return response data</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.UserController.SendMail(CommonLayer.RequestModels.ForgotPasswordRequest,System.String)">
+            <summary>
+            It is used for sending mail to the user
+            </summary>
+            <param name="forgotPassword">Email</param>
+            <param name="jsonToken">token</param>
+        </member>
+        <member name="M:Fundoo.Controllers.UserController.CreateToken(CommonLayer.ResponseModels.ResponseData,System.String)">
+            <summary>
+            It Create Token
+            </summary>
+            <param name="responseData">Response Data</param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

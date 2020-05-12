@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace CommonLayer.ResponseModels
 {
@@ -22,5 +23,7 @@ namespace CommonLayer.ResponseModels
 
         [DefaultValue(false)]
         public bool Trash { set; get; }
+
+        public DateTime? Reminder { set; get; }
     }
 }

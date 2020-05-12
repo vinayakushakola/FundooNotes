@@ -6,11 +6,11 @@ namespace BusinessLayer.Interface
 {
     public interface IUserBusiness
     {
+        List<ResponseData> GetUsersData();
+
         ResponseData CreateAccount(SignUpRequest userSignUp);
 
         ResponseData UserLogin(LoginRequest login);
-
-        List<ResponseData> GetUsersData();
 
         ResponseData ForgotPassword(ForgotPasswordRequest forgotPassword);
 

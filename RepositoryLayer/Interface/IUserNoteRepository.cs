@@ -8,9 +8,17 @@ namespace RepositoryLayer.Interface
     {
         UserNoteResponseData CreateNote(int userID, UserNoteRequest userNotes);
 
-        string DeleteNote(int noteID);
-
         UserNoteResponseData UpdateNote(int userID, int noteID, UpdateNoteRequest updateNoteRequest);
+
+        UserNoteResponseData UpdateReminder(int userID, int noteID, ReminderRequest reminder);
+
+        bool DeleteNote(int noteID);
+
+        bool TrashNote(int userID, int noteID);
+
+        bool ArchievedUnarchievedNote(int userID, int noteID);
+
+        bool PinUnpinNote(int userID, int noteID);
 
         List<UserNoteResponseData> GetAllUserNotes(int userID);
 
