@@ -66,7 +66,6 @@ namespace Fundoo.UnitTest
             Assert.IsType<BadRequestObjectResult>(data);
         }
 
-        
 
         [Fact]
         public void ForgotPassword_ValidEmailData_Return_OkResult()
