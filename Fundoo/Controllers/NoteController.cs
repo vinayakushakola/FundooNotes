@@ -11,6 +11,7 @@ using System.Web;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Configuration;
+using System.Drawing;
 
 namespace Fundoo.Controllers
 {
@@ -197,7 +198,6 @@ namespace Fundoo.Controllers
             }
         }
 
-
         /// <summary>
         /// It is used to Trash Note
         /// </summary>
@@ -369,6 +369,37 @@ namespace Fundoo.Controllers
                 {
                     success = true;
                     message = "Reminder Set Successfully";
+                    return Ok(new { success, message, userUpdateData });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+
+            }
+        }
+
+
+        [HttpPut]
+        [Route("{noteID}/Color")]
+        public IActionResult AddColor(int noteID, ColorRequest color)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+                UserNoteResponseData userUpdateData = _userNoteBusiness.AddColor(userId, noteID, color);
+                bool success = false;
+                string message;
+                if (userUpdateData == null)
+                {
+                    message = "Try again";
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    success = true;
+                    message = "Color Set Successfully";
                     return Ok(new { success, message, userUpdateData });
                 }
             }

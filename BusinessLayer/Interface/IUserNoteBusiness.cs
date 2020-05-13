@@ -12,6 +12,8 @@ namespace BusinessLayer.Interface
 
         UserNoteResponseData UpdateReminder(int userID, int noteID, ReminderRequest reminder);
 
+        UserNoteResponseData AddColor(int userID, int noteID, ColorRequest color);
+
         bool AddImage(int userID, int noteID, ImageRequest image);
 
         bool DeleteNote(int noteID);

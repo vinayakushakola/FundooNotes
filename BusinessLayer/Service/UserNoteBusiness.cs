@@ -31,6 +31,13 @@ namespace BusinessLayer.Service
             UserNoteResponseData responseData = _userNoteRepository.UpdateReminder(userID, noteID, reminder);
             return responseData;
         }
+
+        public UserNoteResponseData AddColor(int userID, int noteID, ColorRequest color)
+        {
+            UserNoteResponseData responseData = _userNoteRepository.AddColor(userID, noteID, color);
+            return responseData;
+        }
+
         public bool DeleteNote(int noteID)
         {
             bool responseData = _userNoteRepository.DeleteNote(noteID);
@@ -86,5 +93,7 @@ namespace BusinessLayer.Service
             bool data = _userNoteRepository.AddImage(userID, noteID, image);
             return data;
         }
+
+        
     }
 }

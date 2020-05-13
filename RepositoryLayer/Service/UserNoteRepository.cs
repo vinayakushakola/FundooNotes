@@ -119,6 +119,33 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public UserNoteResponseData AddColor(int userID, int noteID, ColorRequest color)
+        {
+            try
+            {
+                UserNoteResponseData userNoteResponseData = null;
+                var userData = _context.UserNotes.FirstOrDefault(user => user.UserId == userID && user.NotesId == noteID);
+                userData.Color = color.Color;
+                _context.SaveChanges();
+
+                userNoteResponseData = new UserNoteResponseData()
+                {
+                    NoteId = userData.NotesId,
+                    Title = userData.Title,
+                    Description = userData.Description,
+                    Color = userData.Color,
+                    Image = userData.Image,
+                    Pin = userData.Pin,
+                    Archived = userData.Archived,
+                    Trash = userData.Trash
+                };
+                return userNoteResponseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public bool AddImage(int userID, int noteID, ImageRequest image)
         {
