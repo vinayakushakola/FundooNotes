@@ -11,6 +11,30 @@
             <param name="labelRequest">Label Name</param>
             <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllUserNotes">
+            <summary>
+            It shows all the notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllTrashedNotes">
+            <summary>
+            It shows all Trashed notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllArchievedNotes">
+            <summary>
+            It shows all Archieve notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetPinnedNotes">
+            <summary>
+            It shows Pinned notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
         <member name="M:Fundoo.Controllers.NoteController.CreateNote(CommonLayer.RequestModels.UserNoteRequest)">
             <summary>
             It Creates Note
@@ -62,29 +86,13 @@
             <param name="noteID">Note ID</param>
             <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         </member>
-        <member name="M:Fundoo.Controllers.NoteController.GetAllUserNotes">
+        <member name="M:Fundoo.Controllers.NoteController.UploadImage(System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
-            It shows all the notes
+            It is used to Upload Image to Cloudinary
             </summary>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        </member>
-        <member name="M:Fundoo.Controllers.NoteController.GetAllTrashedNotes">
-            <summary>
-            It shows all Trashed notes
-            </summary>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        </member>
-        <member name="M:Fundoo.Controllers.NoteController.GetAllArchievedNotes">
-            <summary>
-            It shows all Archieve notes
-            </summary>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        </member>
-        <member name="M:Fundoo.Controllers.NoteController.GetPinnedNotes">
-            <summary>
-            It shows Pinned notes
-            </summary>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+            <param name="noteID"></param>
+            <param name="imageFile"></param>
+            <returns></returns>
         </member>
         <member name="M:Fundoo.Controllers.UserController.GetUsersData">
             <summary>

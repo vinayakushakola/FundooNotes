@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Configuration;
 
 namespace Fundoo.Controllers
 {
@@ -16,11 +20,148 @@ namespace Fundoo.Controllers
     public class NoteController : ControllerBase
     {
         private readonly IUserNoteBusiness _userNoteBusiness;
+        private readonly IConfiguration _config;
 
-        public NoteController(IUserNoteBusiness userNoteBusiness)
+        public NoteController(IUserNoteBusiness userNoteBusiness, IConfiguration config)
         {
             _userNoteBusiness = userNoteBusiness;
+            _config = config;    
         }
+
+
+        /// <summary>
+        /// It shows all the notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        [HttpGet]
+        [Route("")]
+        public IActionResult GetAllUserNotes()
+        {
+            try
+            {
+                string message;
+                bool success = false;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetAllUserNotes(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    message = "Not found";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// It shows all Trashed notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        [HttpGet]
+        [Route("Trash")]
+        public IActionResult GetAllTrashedNotes()
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetTrashedNotes(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    message = "No Trashed Notes";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// It shows all Archieve notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        [HttpGet]
+        [Route("Archieve")]
+        public IActionResult GetAllArchievedNotes()
+        {
+            try
+            {
+                string message;
+                bool success = false;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetArchievedNotes(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    message = "Not found";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// It shows Pinned notes
+        /// </summary>
+        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        [HttpGet]
+        [Route("Pin")]
+        public IActionResult GetPinnedNotes()
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetPinnedNotes(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    message = "Not found";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
 
         /// <summary>
         /// It Creates Note
@@ -271,31 +412,40 @@ namespace Fundoo.Controllers
 
 
         /// <summary>
-        /// It shows all the notes
+        /// It is used to Upload Image to Cloudinary
         /// </summary>
-        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        [HttpGet]
-        [Route("")]
-        public IActionResult GetAllUserNotes()
+        /// <param name="noteID"></param>
+        /// <param name="imageFile"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{noteID}/Image")]
+        public IActionResult UploadImage(int noteID, IFormFile imageFile)
         {
             try
             {
-                string message;
                 bool success = false;
+                string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
-                int userId = Convert.ToInt32(idClaim.Value);
-
-                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetAllUserNotes(userId);
-
-                if (userNoteResponseDataList != null)
+                int userID = Convert.ToInt32(idClaim.Value);
+                string url = UploadImageToCloud(imageFile);
+                var imageRequest = new ImageRequest()
                 {
-                    return Ok(userNoteResponseDataList.ToList());
+                    Image = url
+                };
+                bool data = _userNoteBusiness.AddImage(userID, noteID, imageRequest);
+                if (data)
+                {
+                    success = true;
+                    message = "Image Successfully Uploaded to cloudinary";
+                    return Ok(new { success, message, url });
                 }
                 else
                 {
                     message = "Not found";
                     return Ok(new { success, message });
                 }
+
+
             }
             catch (Exception ex)
             {
@@ -303,103 +453,26 @@ namespace Fundoo.Controllers
             }
         }
 
-
-        /// <summary>
-        /// It shows all Trashed notes
-        /// </summary>
-        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        [HttpGet]
-        [Route("Trash")]
-        public IActionResult GetAllTrashedNotes()
+        private string UploadImageToCloud(IFormFile image)
         {
             try
             {
-                bool success = false;
-                string message;
-                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
-                int userId = Convert.ToInt32(idClaim.Value);
+                var myAccount = new Account(_config["Cloudinary:CloudName"], _config["Cloudinary:ApiKey"], _config["Cloudinary:ApiSecret"]);
 
-                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetTrashedNotes(userId);
+                Cloudinary _cloudinary = new Cloudinary(myAccount);
 
-                if (userNoteResponseDataList != null)
+                var imageUpload = new ImageUploadParams
                 {
-                    return Ok(userNoteResponseDataList.ToList());
-                }
-                else
-                {
-                    message = "No Trashed Notes";
-                    return Ok(new { success, message });
-                }
+                    File = new FileDescription(image.FileName, image.OpenReadStream()),
+                };
+
+                var uploadResult = _cloudinary.Upload(imageUpload);
+
+                return uploadResult.SecureUri.AbsoluteUri;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                return BadRequest(new { ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// It shows all Archieve notes
-        /// </summary>
-        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        [HttpGet]
-        [Route("Archieve")]
-        public IActionResult GetAllArchievedNotes()
-        {
-            try
-            {
-                string message;
-                bool success = false;
-                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
-                int userId = Convert.ToInt32(idClaim.Value);
-
-                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetArchievedNotes(userId);
-
-                if (userNoteResponseDataList != null)
-                {
-                    return Ok(userNoteResponseDataList.ToList());
-                }
-                else
-                {
-                    message = "Not found";
-                    return Ok(new { success, message });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// It shows Pinned notes
-        /// </summary>
-        /// <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        [HttpGet]
-        [Route("Pin")]
-        public IActionResult GetPinnedNotes()
-        {
-            try
-            {
-                bool success = false;
-                string message;
-                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
-                int userId = Convert.ToInt32(idClaim.Value);
-
-                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetPinnedNotes(userId);
-
-                if (userNoteResponseDataList != null)
-                {
-                    return Ok(userNoteResponseDataList.ToList());
-                }
-                else
-                {
-                    message = "Not found";
-                    return Ok(new { success, message });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
+                throw new Exception(ex.Message);
             }
         }
 

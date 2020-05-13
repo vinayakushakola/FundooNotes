@@ -12,6 +12,8 @@ namespace RepositoryLayer.Interface
 
         UserNoteResponseData UpdateReminder(int userID, int noteID, ReminderRequest reminder);
 
+        bool AddImage(int userID, int noteID, ImageRequest image);
+
         bool DeleteNote(int noteID);
 
         bool TrashNote(int userID, int noteID);

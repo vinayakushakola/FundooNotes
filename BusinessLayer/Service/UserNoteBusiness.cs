@@ -80,5 +80,11 @@ namespace BusinessLayer.Service
             bool responseData = _userNoteRepository.PinUnpinNote(userID, noteID);
             return responseData;
         }
+
+        public bool AddImage(int userID, int noteID, ImageRequest image)
+        {
+            bool data = _userNoteRepository.AddImage(userID, noteID, image);
+            return data;
+        }
     }
 }
