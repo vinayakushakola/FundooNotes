@@ -10,9 +10,9 @@ namespace RepositoryLayer.Interface
 
         UserNoteResponseData UpdateNote(int userID, int noteID, UpdateNoteRequest updateNoteRequest);
 
-        UserNoteResponseData UpdateReminder(int userID, int noteID, ReminderRequest reminder);
+        bool AddReminder(int userID, int noteID, ReminderRequest reminder);
 
-        UserNoteResponseData AddColor(int userID, int noteID, ColorRequest color);
+        bool AddColor(int userID, int noteID, ColorRequest color);
 
         bool AddImage(int userID, int noteID, ImageRequest image);
 
@@ -31,6 +31,8 @@ namespace RepositoryLayer.Interface
         List<UserNoteResponseData> GetArchievedNotes(int userID);
 
         List<UserNoteResponseData> GetPinnedNotes(int userID);
+
+        List<UserNoteResponseData> GetReminders(int userID);
 
     }
 }

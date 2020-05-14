@@ -26,15 +26,15 @@ namespace BusinessLayer.Service
             return userNoteResponseData;
         }
 
-        public UserNoteResponseData UpdateReminder(int userID, int noteID, ReminderRequest reminder)
+        public bool AddReminder(int userID, int noteID, ReminderRequest reminder)
         {
-            UserNoteResponseData responseData = _userNoteRepository.UpdateReminder(userID, noteID, reminder);
+            bool responseData = _userNoteRepository.AddReminder(userID, noteID, reminder);
             return responseData;
         }
 
-        public UserNoteResponseData AddColor(int userID, int noteID, ColorRequest color)
+        public bool AddColor(int userID, int noteID, ColorRequest color)
         {
-            UserNoteResponseData responseData = _userNoteRepository.AddColor(userID, noteID, color);
+            bool responseData = _userNoteRepository.AddColor(userID, noteID, color);
             return responseData;
         }
 
@@ -67,6 +67,12 @@ namespace BusinessLayer.Service
         public List<UserNoteResponseData> GetPinnedNotes(int userID)
         {
             List<UserNoteResponseData> userNoteResponseData = _userNoteRepository.GetPinnedNotes(userID);
+            return userNoteResponseData;
+        }
+
+        public List<UserNoteResponseData> GetReminders(int userID)
+        {
+            List<UserNoteResponseData> userNoteResponseData = _userNoteRepository.GetReminders(userID);
             return userNoteResponseData;
         }
 

@@ -33,7 +33,6 @@ namespace RepositoryLayer.Service
                     Pin = userNoteData.Pin,
                     Archived = userNoteData.Archived,
                     Trash = userNoteData.Trash,
-                    Reminder = userNoteData.Reminder,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
                 };
@@ -91,27 +90,22 @@ namespace RepositoryLayer.Service
         }
 
 
-        public UserNoteResponseData UpdateReminder(int userID, int noteID, ReminderRequest reminder)
+        public bool AddReminder(int userID, int noteID, ReminderRequest reminder)
         {
             try
             {
-                UserNoteResponseData userNoteResponseData = null;
                 var userData = _context.UserNotes.FirstOrDefault(user => user.UserId == userID && user.NotesId == noteID);
-                userData.Reminder = reminder.Reminder;
-                _context.SaveChanges();
-
-                userNoteResponseData = new UserNoteResponseData()
+                if(userData != null)
                 {
-                    NoteId = userData.NotesId,
-                    Title = userData.Title,
-                    Description = userData.Description,
-                    Color = userData.Color,
-                    Image = userData.Image,
-                    Pin = userData.Pin,
-                    Archived = userData.Archived,
-                    Trash = userData.Trash
-                };
-                return userNoteResponseData;
+                    userData.Reminder = reminder.Reminder;
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
             }
             catch (Exception ex)
             {
@@ -119,27 +113,22 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public UserNoteResponseData AddColor(int userID, int noteID, ColorRequest color)
+        public bool AddColor(int userID, int noteID, ColorRequest color)
         {
             try
             {
-                UserNoteResponseData userNoteResponseData = null;
                 var userData = _context.UserNotes.FirstOrDefault(user => user.UserId == userID && user.NotesId == noteID);
-                userData.Color = color.Color;
-                _context.SaveChanges();
-
-                userNoteResponseData = new UserNoteResponseData()
+                if(userData != null)
                 {
-                    NoteId = userData.NotesId,
-                    Title = userData.Title,
-                    Description = userData.Description,
-                    Color = userData.Color,
-                    Image = userData.Image,
-                    Pin = userData.Pin,
-                    Archived = userData.Archived,
-                    Trash = userData.Trash
-                };
-                return userNoteResponseData;
+                    userData.Color = color.Color;
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
             }
             catch (Exception ex)
             {
@@ -302,6 +291,37 @@ namespace RepositoryLayer.Service
                     return null;
                 }
                 return userNoteLists;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<UserNoteResponseData> GetReminders(int userID)
+        {
+            try
+            {
+                List<UserNoteResponseData> noteReminders = _context.UserNotes.
+                    Where(note => note.UserId == userID && note.Reminder != null).
+                    Select(note => new UserNoteResponseData
+                    {
+                        NoteId = note.NotesId,
+                        Title = note.Title,
+                        Description = note.Description,
+                        Color = note.Color,
+                        Image = note.Image,
+                        Pin = note.Pin,
+                        Archived = note.Archived,
+                        Trash = note.Trash,
+                        Reminder = note.Reminder
+                    }).
+                    ToList();
+                if(noteReminders == null)
+                {
+                    return null;
+                }
+                return noteReminders;
             }
             catch (Exception ex)
             {

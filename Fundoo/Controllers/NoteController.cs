@@ -164,6 +164,36 @@ namespace Fundoo.Controllers
         }
 
 
+        [HttpGet]
+        [Route("Reminder")]
+        public IActionResult GetReminders()
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+
+                List<UserNoteResponseData> userNoteResponseDataList = _userNoteBusiness.GetReminders(userId);
+
+                if (userNoteResponseDataList != null)
+                {
+                    return Ok(userNoteResponseDataList.ToList());
+                }
+                else
+                {
+                    message = "Not found";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
         /// <summary>
         /// It Creates Note
         /// </summary>
@@ -204,7 +234,7 @@ namespace Fundoo.Controllers
         /// <param name="noteID">Note ID</param>
         /// <returns>If data found return 200ok, else NotFound response or BadRequest</returns>
         [HttpPost]
-        [Route("{noteID}")]
+        [Route("{noteID}/Trash")]
         public IActionResult TrashNote(int noteID)
         {
             try
@@ -355,21 +385,22 @@ namespace Fundoo.Controllers
         {
             try
             {
+                bool success = false, data;
+                string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Convert.ToInt32(idClaim.Value);
-                UserNoteResponseData userUpdateData = _userNoteBusiness.UpdateReminder(userId, noteID, reminder);
-                bool success = false;
-                string message;
-                if (userUpdateData == null)
+                data = _userNoteBusiness.AddReminder(userId, noteID, reminder);
+                
+                if (data)
                 {
-                    message = "Try again";
+                    success = true;
+                    message = "Reminder Set Successfully";
                     return Ok(new { success, message });
                 }
                 else
                 {
-                    success = true;
-                    message = "Reminder Set Successfully";
-                    return Ok(new { success, message, userUpdateData });
+                    message = "Try Again!";
+                    return Ok(new { success, message });
                 }
             }
             catch (Exception ex)
@@ -386,21 +417,22 @@ namespace Fundoo.Controllers
         {
             try
             {
+                bool success = false, data;
+                string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Convert.ToInt32(idClaim.Value);
-                UserNoteResponseData userUpdateData = _userNoteBusiness.AddColor(userId, noteID, color);
-                bool success = false;
-                string message;
-                if (userUpdateData == null)
+                data = _userNoteBusiness.AddColor(userId, noteID, color);
+                
+                if (data)
                 {
-                    message = "Try again";
+                    success = true;
+                    message = "Color Set Successfully";
                     return Ok(new { success, message });
                 }
                 else
                 {
-                    success = true;
-                    message = "Color Set Successfully";
-                    return Ok(new { success, message, userUpdateData });
+                    message = "Try Again!";
+                    return Ok(new { success, message });
                 }
             }
             catch (Exception ex)
@@ -427,7 +459,8 @@ namespace Fundoo.Controllers
                 if (data)
                 {
                     success = true;
-                    return Ok(new { success, data });
+                    message = "Note Deleted Successfully";
+                    return Ok(new { success, message });
                 }
                 else
                 {
