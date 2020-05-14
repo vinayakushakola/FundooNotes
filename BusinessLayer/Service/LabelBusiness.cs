@@ -21,5 +21,11 @@ namespace BusinessLayer.Service
             LabelResponseData responseData = _labelRepository.CreateLabel(userID, labelRequest);
             return responseData;
         }
+
+        public LabelResponseData EditLabel(int userID, int labelID, UpdateLabelRequest updateRequest)
+        {
+            LabelResponseData responseData = _labelRepository.EditLabel(userID, labelID, updateRequest);
+            return responseData;
+        }
     }
 }

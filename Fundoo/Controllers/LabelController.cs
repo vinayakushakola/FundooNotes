@@ -54,5 +54,36 @@ namespace Fundoo.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
+
+
+        [HttpPut]
+        [Route("{labelID}")]
+        public IActionResult EditLabel(int labelID, UpdateLabelRequest updateLabelRequest)
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+                LabelResponseData data = _labelBusiness.EditLabel(userId, labelID, updateLabelRequest);
+                
+                if (data != null)
+                {
+                    success = true;
+                    message = "Label Updated Successfully";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "Enter Valid Name";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RepositoryLayer.Service
@@ -40,6 +41,30 @@ namespace RepositoryLayer.Service
                 return responseData;
             }
             catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public LabelResponseData EditLabel(int userID, int labelID, UpdateLabelRequest updateRequest)
+        {
+            try
+            {
+
+                var labelData = _context.Labels.
+                                        Where(label => label.UserID == userID && label.LabelID == labelID).
+                                        First<LabelInfo>();
+                labelData.LabelName = updateRequest.LabelName;
+                _context.SaveChanges();
+
+                LabelResponseData responseData = new LabelResponseData()
+                {
+                    LabelID = labelData.LabelID,
+                    LabelName = labelData.LabelName
+                };
+                return responseData;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

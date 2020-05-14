@@ -6,5 +6,7 @@ namespace BusinessLayer.Interface
     public interface ILabelBusiness
     {
         LabelResponseData CreateLabel(int userID, LabelRequest labelRequest);
+
+        LabelResponseData EditLabel(int userID, int labelID, UpdateLabelRequest updateRequest);
     }
 }
