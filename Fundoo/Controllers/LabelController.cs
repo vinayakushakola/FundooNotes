@@ -55,7 +55,12 @@ namespace Fundoo.Controllers
             }
         }
 
-
+        /// <summary>
+        /// It is used to Edit LabelName
+        /// </summary>
+        /// <param name="labelID">LabelID</param>
+        /// <param name="updateLabelRequest">LabelName</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("{labelID}")]
         public IActionResult EditLabel(int labelID, UpdateLabelRequest updateLabelRequest)
@@ -66,8 +71,9 @@ namespace Fundoo.Controllers
                 string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Convert.ToInt32(idClaim.Value);
+
                 LabelResponseData data = _labelBusiness.EditLabel(userId, labelID, updateLabelRequest);
-                
+
                 if (data != null)
                 {
                     success = true;
@@ -76,7 +82,43 @@ namespace Fundoo.Controllers
                 }
                 else
                 {
-                    message = "Enter Valid Name";
+                    message = "Try Again!";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// It is used to Delete Label
+        /// </summary>
+        /// <param name="labelID">LabelID</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("{labelID}")]
+        public IActionResult DeleteLabel(int labelID)
+        {
+            try
+            {
+                bool success = false, data;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+                data = _labelBusiness.DeleteLabel(userId, labelID);
+
+                if (data)
+                {
+                    success = true;
+                    message = "Label Deleted Successfully";
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    message = "Try Again!";
                     return Ok(new { success, message });
                 }
             }

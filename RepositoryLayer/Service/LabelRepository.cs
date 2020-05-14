@@ -46,6 +46,7 @@ namespace RepositoryLayer.Service
             }
         }
 
+
         public LabelResponseData EditLabel(int userID, int labelID, UpdateLabelRequest updateRequest)
         {
             try
@@ -65,6 +66,31 @@ namespace RepositoryLayer.Service
                 return responseData;
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public bool DeleteLabel(int userID, int labelID)
+        {
+            try
+            {
+                var labelData = _context.Labels.
+                    Where(label => label.UserID == userID && label.LabelID == labelID).
+                    FirstOrDefault<LabelInfo>();
+                if(labelData != null)
+                {
+                    _context.Remove(labelData);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
+            }
+            catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }

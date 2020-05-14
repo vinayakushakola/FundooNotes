@@ -11,6 +11,21 @@
             <param name="labelRequest">Label Name</param>
             <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         </member>
+        <member name="M:Fundoo.Controllers.LabelController.EditLabel(System.Int32,CommonLayer.RequestModels.UpdateLabelRequest)">
+            <summary>
+            It is used to Edit LabelName
+            </summary>
+            <param name="labelID">LabelID</param>
+            <param name="updateLabelRequest">LabelName</param>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.LabelController.DeleteLabel(System.Int32)">
+            <summary>
+            It is used to Delete Label
+            </summary>
+            <param name="labelID">LabelID</param>
+            <returns></returns>
+        </member>
         <member name="M:Fundoo.Controllers.NoteController.GetAllUserNotes">
             <summary>
             It shows all the notes

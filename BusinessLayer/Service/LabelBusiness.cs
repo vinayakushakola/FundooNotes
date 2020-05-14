@@ -27,5 +27,12 @@ namespace BusinessLayer.Service
             LabelResponseData responseData = _labelRepository.EditLabel(userID, labelID, updateRequest);
             return responseData;
         }
+
+        public bool DeleteLabel(int userID, int labelID)
+        {
+            bool responseData = _labelRepository.DeleteLabel(userID, labelID);
+            return responseData;
+        }
+
     }
 }

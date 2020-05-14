@@ -8,5 +8,7 @@ namespace BusinessLayer.Interface
         LabelResponseData CreateLabel(int userID, LabelRequest labelRequest);
 
         LabelResponseData EditLabel(int userID, int labelID, UpdateLabelRequest updateRequest);
+
+        bool DeleteLabel(int userID, int labelID);
     }
 }
