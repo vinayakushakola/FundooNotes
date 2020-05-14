@@ -32,24 +32,6 @@
             </summary>
             <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         </member>
-        <member name="M:Fundoo.Controllers.NoteController.GetAllTrashedNotes">
-            <summary>
-            It shows all Trashed notes
-            </summary>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        </member>
-        <member name="M:Fundoo.Controllers.NoteController.GetAllArchievedNotes">
-            <summary>
-            It shows all Archieve notes
-            </summary>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        </member>
-        <member name="M:Fundoo.Controllers.NoteController.GetPinnedNotes">
-            <summary>
-            It shows Pinned notes
-            </summary>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
-        </member>
         <member name="M:Fundoo.Controllers.NoteController.CreateNote(CommonLayer.RequestModels.UserNoteRequest)">
             <summary>
             It Creates Note
@@ -78,6 +60,37 @@
             <param name="noteID"></param>
             <returns></returns>
         </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllTrashedNotes">
+            <summary>
+            It shows all Trashed notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetAllArchievedNotes">
+            <summary>
+            It shows all Archieve notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetPinnedNotes">
+            <summary>
+            It shows Pinned notes
+            </summary>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.GetReminders">
+            <summary>
+            It is used to show all Reminder Notes
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.DeleteNote(System.Int32)">
+            <summary>
+            It Deletes Note Forever
+            </summary>
+            <param name="noteID">Note ID</param>
+            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+        </member>
         <member name="M:Fundoo.Controllers.NoteController.UpdateNotes(System.Int32,CommonLayer.RequestModels.UpdateNoteRequest)">
             <summary>
             It Update Note
@@ -94,18 +107,26 @@
             <param name="reminder">Reminder</param>
             <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
         </member>
-        <member name="M:Fundoo.Controllers.NoteController.DeleteNote(System.Int32)">
+        <member name="M:Fundoo.Controllers.NoteController.AddColor(System.Int32,CommonLayer.RequestModels.ColorRequest)">
             <summary>
-            It Deletes Note Forever
+            It is used to Add Color
             </summary>
-            <param name="noteID">Note ID</param>
-            <returns>If Data Found, It return 200ok else return NotFound Response And If any exception occured return BadRequest</returns>
+            <param name="noteID">NoteID</param>
+            <param name="color">Color</param>
+            <returns></returns>
         </member>
-        <member name="M:Fundoo.Controllers.NoteController.UploadImage(System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:Fundoo.Controllers.NoteController.AddImage(System.Int32,CommonLayer.RequestModels.ImageRequest)">
+            <summary>
+            It is used to Add Image
+            </summary>
+            <param name="noteID">NoteID</param>
+            <param name="imageRequest">Image url</param>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.UploadImage(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             It is used to Upload Image to Cloudinary
             </summary>
-            <param name="noteID"></param>
             <param name="imageFile"></param>
             <returns></returns>
         </member>
