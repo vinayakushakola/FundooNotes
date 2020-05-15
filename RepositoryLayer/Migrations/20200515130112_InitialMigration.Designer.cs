@@ -10,8 +10,8 @@ using RepositoryLayer.ApplicationDbContext;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200512161610_IntialMigration")]
-    partial class IntialMigration
+    [Migration("20200515130112_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,27 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("LabelID");
 
                     b.ToTable("Labels");
+                });
+
+            modelBuilder.Entity("CommonLayer.Models.NotesLabel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("LabelId");
+
+                    b.Property<DateTime>("ModifiedAt");
+
+                    b.Property<int>("NotesId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LabelId");
+
+                    b.ToTable("NotesLabels");
                 });
 
             modelBuilder.Entity("CommonLayer.Models.UserInfo", b =>
@@ -99,6 +120,14 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("NotesId");
 
                     b.ToTable("UserNotes");
+                });
+
+            modelBuilder.Entity("CommonLayer.Models.NotesLabel", b =>
+                {
+                    b.HasOne("CommonLayer.Models.LabelInfo")
+                        .WithMany("Notes")
+                        .HasForeignKey("LabelId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

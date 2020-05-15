@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +20,8 @@ namespace CommonLayer.Models
         public DateTime CreatedDate{ set; get; }
 
         public DateTime ModifiedDate { set; get; }
+
+        public List<NotesLabel> Notes { set; get; }
 
     }
 }

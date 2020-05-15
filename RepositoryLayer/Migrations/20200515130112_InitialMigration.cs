@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class IntialMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,18 +64,48 @@ namespace RepositoryLayer.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.ID);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "NotesLabels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    NotesId = table.Column<int>(nullable: false),
+                    LabelId = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ModifiedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotesLabels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NotesLabels_Labels_LabelId",
+                        column: x => x.LabelId,
+                        principalTable: "Labels",
+                        principalColumn: "LabelID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotesLabels_LabelId",
+                table: "NotesLabels",
+                column: "LabelId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Labels");
+                name: "NotesLabels");
 
             migrationBuilder.DropTable(
                 name: "UserNotes");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Labels");
         }
     }
 }
