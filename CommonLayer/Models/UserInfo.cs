@@ -18,6 +18,8 @@ namespace CommonLayer.Models
         [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Your Last Name should only contain Alphabets!")]
         public string LastName { get; set; }
 
+        public string ProfilePic { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }

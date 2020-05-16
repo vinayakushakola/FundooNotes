@@ -1,7 +1,10 @@
 ﻿using BusinessLayer.Interface;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +25,9 @@ namespace Fundoo.Controllers
         private readonly IUserBusiness _userBusiness;
 
         private readonly IConfiguration _config;
+
+        private static string _login = "login";
+
 
         public UserController(IUserBusiness signUpBusiness, IConfiguration config)
         {
@@ -105,7 +111,7 @@ namespace Fundoo.Controllers
                     success = true;
                     userFullName = data.FirstName + " " + data.LastName;
                     message = "Hello " + userFullName + ", You Logged in Successfully";
-                    jsonToken = CreateToken(data, "login");
+                    jsonToken = CreateToken(data, _login);
                     return Ok(new { success, message, data, jsonToken });
                 }
             }
@@ -185,6 +191,41 @@ namespace Fundoo.Controllers
                 }
             }
             catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// It is used for Uploading Profile Picture
+        /// </summary>
+        /// <param name="userID">UserID</param>
+        /// <param name="profilePic">Profile Pic</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{userID}/ProfilePic")]
+        public IActionResult AddProfilePic(int userID, ProfilePicRequest profilePic)
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                ResponseData data = _userBusiness.AddProfilePic(Convert.ToInt32(idClaim.Value), profilePic);
+                if (data != null)
+                {
+                    success = true;
+                    message = "Profile Picture Added Succesfully";
+
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "Image Not Found!";
+                    return Ok(new { success, message });
+                }
+            }
+            catch(Exception ex)
             {
                 return BadRequest(new { ex.Message });
             }

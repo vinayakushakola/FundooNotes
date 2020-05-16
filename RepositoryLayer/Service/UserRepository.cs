@@ -29,6 +29,7 @@ namespace RepositoryLayer.Service
                         ID = user.ID,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
+                        ProfilePic = user.ProfilePic,
                         Email = user.Email
                     }).
                     ToList();
@@ -56,6 +57,7 @@ namespace RepositoryLayer.Service
                     ID = user.ID,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    ProfilePic = user.ProfilePic,
                     Email = user.Email
                 };
                 return responseData;
@@ -89,6 +91,7 @@ namespace RepositoryLayer.Service
                     ID = user.ID,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    ProfilePic = user.ProfilePic,
                     Email = user.Email
                 };
                 return responseData;
@@ -117,6 +120,37 @@ namespace RepositoryLayer.Service
                         ID = userData.ID,
                         FirstName = userData.FirstName,
                         LastName = userData.LastName,
+                        ProfilePic = userData.ProfilePic,
+                        Email = userData.Email
+                    };
+                }
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public ResponseData AddProfilePic(int userID, ProfilePicRequest profilePic)
+        {
+            try
+            {
+                ResponseData responseData = null;
+                var userData = _context.Users.
+                    Where(user => user.ID == userID).
+                    First<UserInfo>();
+                userData.ProfilePic = profilePic.ProfilePic;
+                _context.SaveChanges();
+                if (userData != null)
+                {
+                    responseData = new ResponseData()
+                    {
+                        ID = userData.ID,
+                        FirstName = userData.FirstName,
+                        LastName = userData.LastName,
+                        ProfilePic = userData.ProfilePic,
                         Email = userData.Email
                     };
                 }
@@ -151,6 +185,5 @@ namespace RepositoryLayer.Service
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }

@@ -106,7 +106,7 @@ namespace RepositoryLayer.Service
                     _context.SaveChanges();
                 }
 
-                LabelInfo labelInfo= _context.Labels.FirstOrDefault(note => note.LabelID == labelID);
+                LabelInfo labelInfo = _context.Labels.FirstOrDefault(note => note.LabelID == labelID);
 
                 if (labelInfo != null)
                 {

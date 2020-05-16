@@ -12,6 +12,8 @@ namespace RepositoryLayer.Interface
 
         ResponseData UserLogin(LoginRequest login);
 
+        ResponseData AddProfilePic(int userID, ProfilePicRequest profilePic);
+
         ResponseData ForgotPassword(ForgotPasswordRequest forgotPassword);
 
         ResponseData ResetPassword(int id, ResetPasswordRequest newPassword);

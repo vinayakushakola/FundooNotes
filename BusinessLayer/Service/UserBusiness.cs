@@ -40,6 +40,13 @@ namespace BusinessLayer.Service
             return responseData;
         }
 
+
+        public ResponseData AddProfilePic(int userID, ProfilePicRequest profilePic)
+        {
+            ResponseData responseData = _userRepository.AddProfilePic(userID, profilePic);
+            return responseData;
+        }
+
         public ResponseData ForgotPassword(ForgotPasswordRequest forgotPassword)
         {
             ResponseData responseData = _userRepository.ForgotPassword(forgotPassword);

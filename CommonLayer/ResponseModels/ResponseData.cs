@@ -12,6 +12,8 @@ namespace CommonLayer.ResponseModels
 
         public string LastName { set; get; }
 
+        public string ProfilePic { get; set; }
+
         public string Email { set; get; }
     }
 }

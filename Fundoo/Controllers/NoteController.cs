@@ -556,7 +556,7 @@ namespace Fundoo.Controllers
         /// </summary>
         /// <param name="imageFile"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
         [Route("Image")]
         public IActionResult UploadImage(IFormFile imageFile)
         {
