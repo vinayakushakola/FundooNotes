@@ -98,11 +98,24 @@ namespace RepositoryLayer.Service
         {
             try
             {
-                var labelData = _context.Labels.
-                    Where(label => label.UserID == userID && label.LabelID == labelID).
-                    FirstOrDefault<LabelInfo>();
-                _context.Remove(labelData);
-                return true;
+                List<NotesLabel> notesLabels = _context.NotesLabels.Where(label => label.LabelId == labelID).ToList();
+
+                if (notesLabels != null && notesLabels.Count != 0)
+                {
+                    _context.NotesLabels.RemoveRange(notesLabels);
+                    _context.SaveChanges();
+                }
+
+                LabelInfo labelInfo= _context.Labels.FirstOrDefault(note => note.LabelID == labelID);
+
+                if (labelInfo != null)
+                {
+                    _context.Labels.Remove(labelInfo);
+                    _context.SaveChanges();
+
+                    return true;
+                }
+                return false;
                 
             }
             catch(Exception ex)
