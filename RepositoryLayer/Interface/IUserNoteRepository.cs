@@ -34,5 +34,7 @@ namespace RepositoryLayer.Interface
 
         List<UserNoteResponseData> GetReminders(int userID);
 
+        UserNoteResponseData AddlabelsToNote(int userID, int noteID, AddLabelNoteRequest addLabelNote);
+
     }
 }

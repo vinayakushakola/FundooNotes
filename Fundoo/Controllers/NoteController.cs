@@ -517,6 +517,41 @@ namespace Fundoo.Controllers
         }
 
         /// <summary>
+        /// It is used to Add Label to Note
+        /// </summary>
+        /// <param name="noteID"></param>
+        /// <param name="addLabelNote"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{noteID}/Label")]
+        public IActionResult AddLabelToANote(int noteID, AddLabelNoteRequest addLabelNote)
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userID = Convert.ToInt32(idClaim.Value);
+                UserNoteResponseData data = _userNoteBusiness.AddlabelsToNote(userID, noteID, addLabelNote);
+                if (data != null)
+                {
+                    success = true;
+                    message = "Label Added to note Succesfully";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "Try Again!";
+                    return Ok(new { success, message, data });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
         /// It is used to Upload Image to Cloudinary
         /// </summary>
         /// <param name="imageFile"></param>
@@ -548,6 +583,8 @@ namespace Fundoo.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
+
+
 
         private string UploadImageToCloud(IFormFile image)
         {

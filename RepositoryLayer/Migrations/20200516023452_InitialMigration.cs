@@ -85,12 +85,23 @@ namespace RepositoryLayer.Migrations
                         principalTable: "Labels",
                         principalColumn: "LabelID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NotesLabels_UserNotes_NotesId",
+                        column: x => x.NotesId,
+                        principalTable: "UserNotes",
+                        principalColumn: "NotesId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_NotesLabels_LabelId",
                 table: "NotesLabels",
                 column: "LabelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotesLabels_NotesId",
+                table: "NotesLabels",
+                column: "NotesId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -99,13 +110,13 @@ namespace RepositoryLayer.Migrations
                 name: "NotesLabels");
 
             migrationBuilder.DropTable(
-                name: "UserNotes");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Labels");
+
+            migrationBuilder.DropTable(
+                name: "UserNotes");
         }
     }
 }

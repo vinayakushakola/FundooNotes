@@ -33,11 +33,46 @@ namespace RepositoryLayer.Service
                     Pin = userNoteData.Pin,
                     Archived = userNoteData.Archived,
                     Trash = userNoteData.Trash,
+                    Reminder = userNoteData.Reminder,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
                 };
                 _context.UserNotes.Add(userNote);
                 _context.SaveChanges();
+
+                if (userNoteData.Label != null && userNoteData.Label.Count != 0)
+                {
+                    List<NotesLabelRequest> labelRequests = userNoteData.Label;
+                    foreach (NotesLabelRequest labelRequest in labelRequests)
+                    {
+                        LabelInfo labelInfo = _context.Labels.
+                            Where(label => label.UserID == userID && label.LabelID == labelRequest.LabelId).
+                            FirstOrDefault<LabelInfo>();
+
+                        if (labelRequest.LabelId > 0 && labelInfo != null)
+                        {
+                            var data = new NotesLabel
+                            {
+                                LabelId = labelRequest.LabelId,
+                                NotesId = userNote.NotesId,
+                            };
+                            _context.NotesLabels.Add(data);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+
+                List<LabelResponseData> labelsData = _context.NotesLabels.
+                        Where(note => note.NotesId == userNote.NotesId).
+                        Join(_context.Labels,
+                        labbelledNote => labbelledNote.LabelId,
+                        label => label.LabelID,
+                        (labbelledNote, label) => new LabelResponseData
+                        {
+                            LabelID = labbelledNote.LabelId,
+                            LabelName = label.LabelName,
+                        }).
+                        ToList();
 
                 UserNoteResponseData noteResponseData = new UserNoteResponseData()
                 {
@@ -48,7 +83,9 @@ namespace RepositoryLayer.Service
                     Image = userNote.Image,
                     Pin = userNote.Pin,
                     Archived = userNote.Archived,
-                    Trash = userNote.Trash
+                    Reminder = userNote.Reminder,
+                    Trash = userNote.Trash,
+                    Labels = labelsData
                 };
                 return noteResponseData;
             }
@@ -184,9 +221,25 @@ namespace RepositoryLayer.Service
                         Pin = user.Pin,
                         Archived = user.Archived,
                         Trash = user.Trash,
-                        Reminder = user.Reminder
+                        Reminder = user.Reminder                        
                     }).
                     ToList();
+                foreach (UserNoteResponseData note in userNoteLists)
+                {
+                    List<LabelResponseData> labels = _context.NotesLabels.
+                    Where(noted => noted.NotesId == note.NoteId).
+                    Join(_context.Labels,
+                    noteLabel => noteLabel.LabelId,
+                    label => label.LabelID,
+                    (noteLabel, label) => new LabelResponseData
+                    {
+                        LabelID = noteLabel.LabelId,
+                        LabelName = label.LabelName,
+                    }).
+                    ToList();
+
+                    note.Labels = labels;
+                }
 
                 if (userNoteLists == null)
                 {
@@ -397,5 +450,82 @@ namespace RepositoryLayer.Service
                 throw new Exception(ex.Message);
             }
         }
+
+        public UserNoteResponseData AddlabelsToNote(int userID, int noteID, AddLabelNoteRequest addLabelNote)
+        {
+            try
+            {
+
+                List<NotesLabel> labels = _context.NotesLabels.Where(notes => notes.NotesId == noteID).ToList();
+
+                if (labels != null && labels.Count != 0)
+                {
+                    _context.NotesLabels.RemoveRange(labels);
+                    _context.SaveChanges();
+                }
+
+                if (addLabelNote.Label.Count > 0)
+                {
+
+                    List<NotesLabelRequest> labelRequests = addLabelNote.Label;
+                    foreach (NotesLabelRequest labelRequest in labelRequests)
+                    {
+                        LabelInfo labelInfo = _context.Labels.
+                            Where(labeled => labeled.UserID == userID && labeled.LabelID == labelRequest.LabelId).
+                            FirstOrDefault<LabelInfo>();
+
+                        if (labelRequest.LabelId > 0 && labelInfo != null)
+                        {
+                            var data = new NotesLabel
+                            {
+                                LabelId = labelRequest.LabelId,
+                                NotesId = noteID
+                            };
+
+                            _context.NotesLabels.Add(data);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+
+                var notesinfo = _context.UserNotes.
+                    Where(note => note.NotesId == noteID && note.UserId == userID).
+                    First<UserNotesInfo>();
+                List<LabelResponseData> labelsData = _context.NotesLabels.
+                        Where(note => note.NotesId == notesinfo.NotesId).
+                        Join(_context.Labels,
+                        noteLabel => noteLabel.LabelId,
+                        label => label.LabelID,
+                        (noteLabel, label) => new LabelResponseData
+                        {
+                            LabelID = noteLabel.LabelId,
+                            LabelName = label.LabelName,
+
+                        }).
+                        ToList();
+
+                UserNoteResponseData noteResponseData = new UserNoteResponseData()
+                {
+                    NoteId = notesinfo.NotesId,
+                    Title = notesinfo.Title,
+                    Description = notesinfo.Description,
+                    Color = notesinfo.Color,
+                    Image = notesinfo.Image,
+                    Pin = notesinfo.Pin,
+                    Archived = notesinfo.Archived,
+                    Trash = notesinfo.Trash,
+                    Reminder = notesinfo.Reminder,
+                    Labels = labelsData
+
+                };
+
+                return noteResponseData;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

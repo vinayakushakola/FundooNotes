@@ -16,8 +16,8 @@ namespace CommonLayer.Models
         [ForeignKey("LabelInfo")]
         public int LabelId { set; get; }
 
-        public DateTime CreatedAt { set; get; }
+        public DateTime CreatedDate { set; get; }
 
-        public DateTime ModifiedAt { set; get; }
+        public DateTime ModifiedDate { set; get; }
     }
 }

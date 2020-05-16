@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace CommonLayer.RequestModels
@@ -22,6 +23,9 @@ namespace CommonLayer.RequestModels
         [DefaultValue(false)]
         public bool Trash { set; get; }
 
-        public DateTime Reminder { get; set; }
+        public DateTime? Reminder { get; set; }
+
+        public List<NotesLabelRequest> Label { set; get; }
+
     }
 }

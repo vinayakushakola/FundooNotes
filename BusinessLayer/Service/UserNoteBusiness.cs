@@ -100,6 +100,10 @@ namespace BusinessLayer.Service
             return data;
         }
 
-        
+        public UserNoteResponseData AddlabelsToNote(int userID, int noteID, AddLabelNoteRequest addLabelNote)
+        {
+            UserNoteResponseData data = _userNoteRepository.AddlabelsToNote(userID, noteID, addLabelNote);
+            return data;
+        }
     }
 }

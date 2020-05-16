@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace CommonLayer.ResponseModels
@@ -25,5 +26,7 @@ namespace CommonLayer.ResponseModels
         public bool Trash { set; get; }
 
         public DateTime? Reminder { set; get; }
+
+        public List<LabelResponseData> Labels { set; get; }
     }
 }

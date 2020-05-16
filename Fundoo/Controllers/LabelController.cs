@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Fundoo.Controllers
@@ -19,6 +20,25 @@ namespace Fundoo.Controllers
         public LabelController(ILabelBusiness labelBusiness)
         {
             _labelBusiness = labelBusiness;
+        }
+
+        /// <summary>
+        /// It is used to show all Labels
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("")]
+        public IActionResult GetAllLabelsData()
+        {
+            try
+            {
+                List<LabelResponseData> labelData = _labelBusiness.GetAllLabels();
+                return Ok(labelData.ToList());
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
         /// <summary>

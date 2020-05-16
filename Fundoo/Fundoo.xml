@@ -4,6 +4,12 @@
         <name>Fundoo</name>
     </assembly>
     <members>
+        <member name="M:Fundoo.Controllers.LabelController.GetAllLabelsData">
+            <summary>
+            It is used to show all Labels
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Fundoo.Controllers.LabelController.CreateNote(CommonLayer.RequestModels.LabelRequest)">
             <summary>
             It Creates Label
@@ -121,6 +127,14 @@
             </summary>
             <param name="noteID">NoteID</param>
             <param name="imageRequest">Image url</param>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.AddLabelToANote(System.Int32,CommonLayer.RequestModels.AddLabelNoteRequest)">
+            <summary>
+            It is used to Add Label to Note
+            </summary>
+            <param name="noteID"></param>
+            <param name="addLabelNote"></param>
             <returns></returns>
         </member>
         <member name="M:Fundoo.Controllers.NoteController.UploadImage(Microsoft.AspNetCore.Http.IFormFile)">

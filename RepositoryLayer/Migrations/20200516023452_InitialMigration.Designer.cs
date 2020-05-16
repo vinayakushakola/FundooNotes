@@ -10,7 +10,7 @@ using RepositoryLayer.ApplicationDbContext;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200515130112_InitialMigration")]
+    [Migration("20200516023452_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,8 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LabelId");
+
+                    b.HasIndex("NotesId");
 
                     b.ToTable("NotesLabels");
                 });
@@ -127,6 +129,11 @@ namespace RepositoryLayer.Migrations
                     b.HasOne("CommonLayer.Models.LabelInfo")
                         .WithMany("Notes")
                         .HasForeignKey("LabelId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CommonLayer.Models.UserNotesInfo")
+                        .WithMany("Labels")
+                        .HasForeignKey("NotesId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

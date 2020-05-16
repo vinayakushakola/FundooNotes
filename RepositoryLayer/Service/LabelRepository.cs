@@ -6,6 +6,7 @@ using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 
 namespace RepositoryLayer.Service
@@ -18,6 +19,27 @@ namespace RepositoryLayer.Service
         {
             _context = context;
         }
+
+        public List<LabelResponseData> GetAllLabels()
+        {
+            try
+            {
+                List<LabelResponseData> labels = _context.Labels.
+                    Where(label => label.LabelID > 0).
+                    Select(label => new LabelResponseData
+                    {
+                        LabelID = label.LabelID,
+                        LabelName = label.LabelName,
+                    }).
+                    ToList();
+                return labels;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         public LabelResponseData CreateLabel(int userID, LabelRequest labelRequest)
         {
@@ -79,15 +101,8 @@ namespace RepositoryLayer.Service
                 var labelData = _context.Labels.
                     Where(label => label.UserID == userID && label.LabelID == labelID).
                     FirstOrDefault<LabelInfo>();
-                if(labelData != null)
-                {
-                    _context.Remove(labelData);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                _context.Remove(labelData);
+                return true;
                 
             }
             catch(Exception ex)

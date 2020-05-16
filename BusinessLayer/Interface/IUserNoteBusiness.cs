@@ -33,5 +33,8 @@ namespace BusinessLayer.Interface
         List<UserNoteResponseData> GetPinnedNotes(int userID);
 
         List<UserNoteResponseData> GetReminders(int userID);
+
+        UserNoteResponseData AddlabelsToNote(int userID, int noteID, AddLabelNoteRequest addLabelNote);
+
     }
 }
