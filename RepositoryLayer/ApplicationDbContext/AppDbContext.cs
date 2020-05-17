@@ -18,5 +18,7 @@ namespace RepositoryLayer.ApplicationDbContext
         public DbSet<LabelInfo> Labels { get; set; }
 
         public DbSet<NotesLabel> NotesLabels { set; get; }
+
+        public DbSet<CollaboratorInfo> Collaborators { get; set; }
     }
 }
