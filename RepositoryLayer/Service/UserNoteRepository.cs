@@ -61,6 +61,25 @@ namespace RepositoryLayer.Service
                         }
                     }
                 }
+                if (userNoteData.Collaborators != null && userNoteData.Collaborators.Count != 0)
+                { 
+                    List<CollaboratorRequest> collaboratorss = userNoteData.Collaborators;
+                    foreach (CollaboratorRequest collaborator in collaboratorss)
+                    {
+                        if (collaborator.UserID > 0)
+                        {
+                            var collabData = new UserNotesInfo
+                            {
+                                NotesId = userNote.NotesId,
+                                UserId = collaborator.UserID,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
+                            };
+                            _context.UserNotes.Add(collabData);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
 
                 List<LabelResponseData> labelsData = _context.NotesLabels.
                         Where(note => note.NotesId == userNote.NotesId).
@@ -73,8 +92,8 @@ namespace RepositoryLayer.Service
                             LabelName = label.LabelName,
                         }).
                         ToList();
-
-                UserNoteResponseData noteResponseData = new UserNoteResponseData()
+                
+                var noteResponseData = new UserNoteResponseData()
                 {
                     NoteId = userNote.NotesId,
                     Title = userNote.Title,
@@ -85,8 +104,23 @@ namespace RepositoryLayer.Service
                     Archived = userNote.Archived,
                     Reminder = userNote.Reminder,
                     Trash = userNote.Trash,
-                    Labels = labelsData
+                    Labels = labelsData,
                 };
+
+                List<CollaboratorResponseData> collabsData = _context.UserNotes.
+                    Where(note => note.NotesId == userNote.NotesId).
+                    Join(_context.Users,
+                    noteU => noteU.UserId,
+                    userN => userN.ID,
+                    (noteU, userN) => new CollaboratorResponseData
+                    {
+                        UserID = noteU.UserId,
+                        Email = userN.Email
+                    }).
+                    Where(note => note.UserID != userNote.UserId).
+                    ToList();
+                
+                noteResponseData.Collaborators = collabsData;
                 return noteResponseData;
             }
             catch(Exception ex)
@@ -94,7 +128,6 @@ namespace RepositoryLayer.Service
                 throw new Exception(ex.Message);
             }
         }
-
 
         public UserNoteResponseData UpdateNote(int userID, int noteID, UpdateNoteRequest updateNoteRequest)
         {
@@ -527,5 +560,17 @@ namespace RepositoryLayer.Service
             }
         }
 
+
+        public UserNoteResponseData AddCollaborator(int userID, int noteID, CollaboratorsRequest collaborators)
+        {
+            try
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception( ex.Message );
+            }
+        }
     }
 }

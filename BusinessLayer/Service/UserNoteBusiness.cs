@@ -105,5 +105,11 @@ namespace BusinessLayer.Service
             UserNoteResponseData data = _userNoteRepository.AddlabelsToNote(userID, noteID, addLabelNote);
             return data;
         }
+
+        public UserNoteResponseData AddCollaborator(int userID, int noteID, CollaboratorsRequest collaborators)
+        {
+            UserNoteResponseData data = _userNoteRepository.AddCollaborator(userID, noteID, collaborators);
+            return data;
+        }
     }
 }

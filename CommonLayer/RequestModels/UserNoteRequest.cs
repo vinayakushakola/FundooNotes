@@ -27,5 +27,6 @@ namespace CommonLayer.RequestModels
 
         public List<NotesLabelRequest> Label { set; get; }
 
+        public List<CollaboratorRequest> Collaborators { get; set; }
     }
 }

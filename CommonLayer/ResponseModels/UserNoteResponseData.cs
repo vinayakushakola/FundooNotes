@@ -28,5 +28,7 @@ namespace CommonLayer.ResponseModels
         public DateTime? Reminder { set; get; }
 
         public List<LabelResponseData> Labels { set; get; }
+        
+        public List<CollaboratorResponseData> Collaborators { set; get; }
     }
 }

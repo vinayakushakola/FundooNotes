@@ -36,5 +36,6 @@ namespace RepositoryLayer.Interface
 
         UserNoteResponseData AddlabelsToNote(int userID, int noteID, AddLabelNoteRequest addLabelNote);
 
+        UserNoteResponseData AddCollaborator(int userID, int noteID, CollaboratorsRequest collaborators);
     }
 }

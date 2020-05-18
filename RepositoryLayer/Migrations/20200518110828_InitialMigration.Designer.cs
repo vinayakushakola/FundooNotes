@@ -10,7 +10,7 @@ using RepositoryLayer.ApplicationDbContext;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200516023452_InitialMigration")]
+    [Migration("20200518110828_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,27 @@ namespace RepositoryLayer.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CommonLayer.Models.CollaboratorInfo", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("ModifiedDate");
+
+                    b.Property<int>("NoteID");
+
+                    b.Property<int>("RecieverID");
+
+                    b.Property<int>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Collaborators");
+                });
 
             modelBuilder.Entity("CommonLayer.Models.LabelInfo", b =>
                 {
@@ -47,11 +68,11 @@ namespace RepositoryLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<DateTime>("CreatedDate");
 
                     b.Property<int>("LabelId");
 
-                    b.Property<DateTime>("ModifiedAt");
+                    b.Property<DateTime>("ModifiedDate");
 
                     b.Property<int>("NotesId");
 
@@ -85,6 +106,8 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired();
+
+                    b.Property<string>("ProfilePic");
 
                     b.HasKey("ID");
 

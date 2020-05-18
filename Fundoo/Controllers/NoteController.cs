@@ -609,5 +609,35 @@ namespace Fundoo.Controllers
             }
         }
 
+
+
+        [HttpPut]
+        [Route("{noteID}/Collab")]
+        public IActionResult AddCollaborator(int noteID, CollaboratorsRequest collaborators)
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userID = Convert.ToInt32(idClaim.Value);
+                UserNoteResponseData data = _userNoteBusiness.AddCollaborator(userID, noteID, collaborators);
+                if (data != null)
+                {
+                    success = true;
+                    message = "Collaborator Added Successfully";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "Try Again!";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
     }
 }

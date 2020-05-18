@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CommonLayer.Models
@@ -7,6 +8,9 @@ namespace CommonLayer.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
+
+        [ForeignKey("UserInfo")]
         public int RecieverID { get; set; }
 
         [ForeignKey("UserInfo")]
@@ -14,5 +18,9 @@ namespace CommonLayer.Models
 
         [ForeignKey("UserNotesInfo")]
         public int NoteID { get; set; }
+
+        public DateTime CreatedDate { get; set; } 
+
+        public DateTime ModifiedDate { get; set; }
     }
 }

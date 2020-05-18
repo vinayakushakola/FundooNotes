@@ -21,15 +21,21 @@ namespace RepositoryLayer.Migrations
 
             modelBuilder.Entity("CommonLayer.Models.CollaboratorInfo", b =>
                 {
-                    b.Property<int>("RecieverID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("ModifiedDate");
+
                     b.Property<int>("NoteID");
+
+                    b.Property<int>("RecieverID");
 
                     b.Property<int>("UserID");
 
-                    b.HasKey("RecieverID");
+                    b.HasKey("ID");
 
                     b.ToTable("Collaborators");
                 });
