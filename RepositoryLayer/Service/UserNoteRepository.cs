@@ -61,7 +61,26 @@ namespace RepositoryLayer.Service
                         }
                     }
                 }
-                
+                if (userNoteData.Collaborators != null && userNoteData.Collaborators.Count != 0)
+                {
+                    List<CollaboratorRequest> collaboratorss = userNoteData.Collaborators;
+                    foreach (CollaboratorRequest collaborator in collaboratorss)
+                    {
+                        if (collaborator.UserID != 0)
+                        {
+                            CollaboratorInfo userNotes = new CollaboratorInfo()
+                            {
+                                UserID = collaborator.UserID,
+                                NoteID = userNote.NotesId,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now,
+                            };
+                            _context.Collaborators.Add(userNotes);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+
 
                 List<LabelResponseData> labelsData = _context.NotesLabels.
                         Where(note => note.NotesId == userNote.NotesId).
@@ -74,7 +93,17 @@ namespace RepositoryLayer.Service
                             LabelName = label.LabelName,
                         }).
                         ToList();
-                
+                List<CollaboratorResponseData> collabsData = _context.Collaborators.
+                        Where(noted => noted.NoteID == userNote.NotesId).
+                        Join(_context.Users,
+                        noteLabel => noteLabel.UserID,
+                        label => label.ID,
+                        (noteLabel, label) => new CollaboratorResponseData
+                        {
+                            UserID = noteLabel.UserID,
+                            Email = label.Email
+                        }).
+                        ToList();
                 var noteResponseData = new UserNoteResponseData()
                 {
                     NoteId = userNote.NotesId,
@@ -87,7 +116,7 @@ namespace RepositoryLayer.Service
                     Reminder = userNote.Reminder,
                     Trash = userNote.Trash,
                     Labels = labelsData,
-                    Collaborators = null
+                    Collaborators = collabsData
                 };
 
                 
