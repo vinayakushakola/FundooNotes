@@ -32,7 +32,9 @@ namespace Fundoo.Controllers
         {
             try
             {
-                List<LabelResponseData> labelData = _labelBusiness.GetAllLabels();
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(idClaim.Value);
+                List<LabelResponseData> labelData = _labelBusiness.GetAllLabels(userId);
                 return Ok(labelData.ToList());
             }
             catch(Exception ex)

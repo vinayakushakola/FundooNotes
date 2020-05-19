@@ -6,7 +6,7 @@ namespace BusinessLayer.Interface
 {
     public interface ILabelBusiness
     {
-        List<LabelResponseData> GetAllLabels();
+        List<LabelResponseData> GetAllLabels(int userID);
 
         LabelResponseData CreateLabel(int userID, LabelRequest labelRequest);
 

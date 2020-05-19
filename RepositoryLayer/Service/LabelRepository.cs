@@ -20,12 +20,12 @@ namespace RepositoryLayer.Service
             _context = context;
         }
 
-        public List<LabelResponseData> GetAllLabels()
+        public List<LabelResponseData> GetAllLabels(int userID)
         {
             try
             {
                 List<LabelResponseData> labels = _context.Labels.
-                    Where(label => label.LabelID > 0).
+                    Where(label => label.LabelID > 0 && label.UserID == userID).
                     Select(label => new LabelResponseData
                     {
                         LabelID = label.LabelID,

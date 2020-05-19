@@ -6,7 +6,7 @@ namespace RepositoryLayer.Interface
 {
     public interface ILabelRepository
     {
-        List<LabelResponseData> GetAllLabels();
+        List<LabelResponseData> GetAllLabels(int userID);
 
         LabelResponseData CreateLabel(int userID, LabelRequest label);
 

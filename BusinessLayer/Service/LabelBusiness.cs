@@ -17,9 +17,9 @@ namespace BusinessLayer.Service
             _labelRepository = labelRepository;
         }
 
-        public List<LabelResponseData> GetAllLabels()
+        public List<LabelResponseData> GetAllLabels(int userID)
         {
-            List<LabelResponseData> responseData = _labelRepository.GetAllLabels();
+            List<LabelResponseData> responseData = _labelRepository.GetAllLabels(userID);
             return responseData;
         }
         public LabelResponseData CreateLabel(int userID, LabelRequest labelRequest)
