@@ -61,25 +61,7 @@ namespace RepositoryLayer.Service
                         }
                     }
                 }
-                if (userNoteData.Collaborators != null && userNoteData.Collaborators.Count != 0)
-                { 
-                    List<CollaboratorRequest> collaboratorss = userNoteData.Collaborators;
-                    foreach (CollaboratorRequest collaborator in collaboratorss)
-                    {
-                        if (collaborator.UserID > 0)
-                        {
-                            var collabData = new UserNotesInfo
-                            {
-                                NotesId = userNote.NotesId,
-                                UserId = collaborator.UserID,
-                                CreatedDate = DateTime.Now,
-                                ModifiedDate = DateTime.Now
-                            };
-                            _context.UserNotes.Add(collabData);
-                            _context.SaveChanges();
-                        }
-                    }
-                }
+                
 
                 List<LabelResponseData> labelsData = _context.NotesLabels.
                         Where(note => note.NotesId == userNote.NotesId).
@@ -105,22 +87,10 @@ namespace RepositoryLayer.Service
                     Reminder = userNote.Reminder,
                     Trash = userNote.Trash,
                     Labels = labelsData,
+                    Collaborators = null
                 };
 
-                List<CollaboratorResponseData> collabsData = _context.UserNotes.
-                    Where(note => note.NotesId == userNote.NotesId).
-                    Join(_context.Users,
-                    noteU => noteU.UserId,
-                    userN => userN.ID,
-                    (noteU, userN) => new CollaboratorResponseData
-                    {
-                        UserID = noteU.UserId,
-                        Email = userN.Email
-                    }).
-                    Where(note => note.UserID != userNote.UserId).
-                    ToList();
                 
-                noteResponseData.Collaborators = collabsData;
                 return noteResponseData;
             }
             catch(Exception ex)
@@ -242,6 +212,7 @@ namespace RepositoryLayer.Service
         {
             try
             {
+
                 List<UserNoteResponseData> userNoteLists = _context.UserNotes.
                     Where(user => user.UserId == userID && user.Archived != true && user.Trash != true && user.Pin != true).
                     Select(user => new UserNoteResponseData
@@ -254,7 +225,7 @@ namespace RepositoryLayer.Service
                         Pin = user.Pin,
                         Archived = user.Archived,
                         Trash = user.Trash,
-                        Reminder = user.Reminder                        
+                        Reminder = user.Reminder
                     }).
                     ToList();
                 foreach (UserNoteResponseData note in userNoteLists)
@@ -273,6 +244,7 @@ namespace RepositoryLayer.Service
 
                     note.Labels = labels;
                 }
+
 
                 if (userNoteLists == null)
                 {
@@ -565,12 +537,69 @@ namespace RepositoryLayer.Service
         {
             try
             {
-                return null;
+                var userNoteData = _context.UserNotes.
+                    Where(userNote => userNote.UserId == userID && userNote.NotesId == noteID).FirstOrDefault();
+                foreach (CollaboratorRequest collaborator in collaborators.Collaborators)
+                {
+                    CollaboratorInfo userNotes = new CollaboratorInfo()
+                    {
+                        UserID = collaborator.UserID,
+                        NoteID = noteID,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                    };
+                    _context.Collaborators.Add(userNotes);
+                    _context.SaveChanges();
+                }
+
+                var notesinfo = _context.UserNotes.
+                    Where(note => note.NotesId == noteID && note.UserId == userID).
+                    First<UserNotesInfo>();
+                List<LabelResponseData> labelsData = _context.NotesLabels.
+                        Where(note => note.NotesId == notesinfo.NotesId).
+                        Join(_context.Labels,
+                        noteLabel => noteLabel.LabelId,
+                        label => label.LabelID,
+                        (noteLabel, label) => new LabelResponseData
+                        {
+                            LabelID = noteLabel.LabelId,
+                            LabelName = label.LabelName,
+
+                        }).
+                        ToList();
+                List<CollaboratorResponseData> collabsData = _context.Collaborators.
+                        Where(noted => noted.NoteID == noteID).
+                        Join(_context.Users,
+                        noteLabel => noteLabel.UserID,
+                        label => label.ID,
+                        (noteLabel, label) => new CollaboratorResponseData
+                        {
+                            UserID = noteLabel.UserID,
+                            Email = label.Email
+                        }).
+                        ToList();
+
+                UserNoteResponseData noteResponseData = new UserNoteResponseData()
+                {
+                    NoteId = notesinfo.NotesId,
+                    Title = notesinfo.Title,
+                    Description = notesinfo.Description,
+                    Color = notesinfo.Color,
+                    Image = notesinfo.Image,
+                    Pin = notesinfo.Pin,
+                    Archived = notesinfo.Archived,
+                    Trash = notesinfo.Trash,
+                    Reminder = notesinfo.Reminder,
+                    Labels = labelsData,
+                    Collaborators = collabsData
+                };
+                return noteResponseData;
             }
             catch (Exception ex)
             {
                 throw new Exception( ex.Message );
             }
         }
+        
     }
 }

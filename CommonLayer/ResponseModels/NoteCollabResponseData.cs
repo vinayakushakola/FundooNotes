@@ -1,11 +1,10 @@
-﻿using CommonLayer.RequestModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace CommonLayer.ResponseModels
 {
-    public class UserNoteResponseData
+    public class NoteCollabResponseData
     {
         public int NoteId { set; get; }
 
@@ -30,6 +29,6 @@ namespace CommonLayer.ResponseModels
 
         public List<LabelResponseData> Labels { set; get; }
 
-        public List<CollaboratorResponseData> Collaborators { get; set; }
+        public List<CollaboratorResponseData> Collaborators { set; get; }
     }
 }

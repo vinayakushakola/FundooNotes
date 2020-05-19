@@ -11,9 +11,6 @@ namespace CommonLayer.Models
         public int ID { get; set; }
 
         [ForeignKey("UserInfo")]
-        public int RecieverID { get; set; }
-
-        [ForeignKey("UserInfo")]
         public int UserID { get; set; }
 
         [ForeignKey("UserNotesInfo")]
