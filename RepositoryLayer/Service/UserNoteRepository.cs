@@ -81,7 +81,6 @@ namespace RepositoryLayer.Service
                     }
                 }
 
-
                 List<LabelResponseData> labelsData = _context.NotesLabels.
                         Where(note => note.NotesId == userNote.NotesId).
                         Join(_context.Labels,
@@ -272,6 +271,22 @@ namespace RepositoryLayer.Service
                     ToList();
 
                     note.Labels = labels;
+                }
+                foreach (UserNoteResponseData note in userNoteLists)
+                {
+                    List<CollaboratorResponseData> collabsData = _context.Collaborators.
+                        Where(noted => noted.NoteID == note.NoteId).
+                        Join(_context.Users,
+                        noteLabel => noteLabel.UserID,
+                        label => label.ID,
+                        (noteLabel, label) => new CollaboratorResponseData
+                        {
+                            UserID = noteLabel.UserID,
+                            Email = label.Email
+                        }).
+                        ToList();
+
+                    note.Collaborators = collabsData;
                 }
 
 
