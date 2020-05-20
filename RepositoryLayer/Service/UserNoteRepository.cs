@@ -240,23 +240,40 @@ namespace RepositoryLayer.Service
         {
             try
             {
-
-                List<UserNoteResponseData> userNoteLists = _context.UserNotes.
-                    Where(user => user.UserId == userID && user.Archived != true && user.Trash != true && user.Pin != true).
-                    Select(user => new UserNoteResponseData
+                List <UserNoteResponseData> collabNotes = _context.Collaborators.
+                    Where(noteD => noteD.UserID == userID).
+                    Join(_context.UserNotes,
+                    collabN => collabN.NoteID,
+                    note => note.NotesId,
+                    (collabN, note) => new UserNoteResponseData
                     {
-                        NoteId = user.NotesId,
-                        Title = user.Title,
-                        Description = user.Description,
-                        Color = user.Color,
-                        Image = user.Image,
-                        Pin = user.Pin,
-                        Archived = user.Archived,
-                        Trash = user.Trash,
-                        Reminder = user.Reminder
+                        NoteId = collabN.NoteID,
+                        Title = note.Title,
+                        Description = note.Description,
+                        Color = note.Color,
+                        Image = note.Image,
+                        Pin = note.Pin,
+                        Archived = note.Archived,
+                        Trash = note.Trash,
+                        Reminder = note.Reminder
                     }).
                     ToList();
-                foreach (UserNoteResponseData note in userNoteLists)
+                List<UserNoteResponseData> notes = _context.UserNotes.
+                    Where(uNote => uNote.UserId == userID).
+                    Select(uNote => new UserNoteResponseData
+                    {
+                        NoteId = uNote.NotesId,
+                        Title = uNote.Title,
+                        Description = uNote.Description,
+                        Color = uNote.Color,
+                        Image = uNote.Image,
+                        Pin = uNote.Pin,
+                        Archived = uNote.Archived,
+                        Trash = uNote.Trash,
+                        Reminder = uNote.Reminder
+                    }).ToList();
+                collabNotes.AddRange(notes);
+                foreach (UserNoteResponseData note in collabNotes)
                 {
                     List<LabelResponseData> labels = _context.NotesLabels.
                     Where(noted => noted.NotesId == note.NoteId).
@@ -272,7 +289,7 @@ namespace RepositoryLayer.Service
 
                     note.Labels = labels;
                 }
-                foreach (UserNoteResponseData note in userNoteLists)
+                foreach (UserNoteResponseData note in collabNotes)
                 {
                     List<CollaboratorResponseData> collabsData = _context.Collaborators.
                         Where(noted => noted.NoteID == note.NoteId).
@@ -290,11 +307,11 @@ namespace RepositoryLayer.Service
                 }
 
 
-                if (userNoteLists == null)
+                if (collabNotes == null)
                 {
                     return null;
                 }
-                return userNoteLists;
+                return collabNotes;
             }
             catch (Exception ex)
             {
@@ -644,6 +661,28 @@ namespace RepositoryLayer.Service
                 throw new Exception( ex.Message );
             }
         }
-        
+
+        public bool RemoveCollaborator(int userID, int noteID, CollaboratorRequest collaborator)
+        {
+            try
+            {
+                var collaboratorsData = _context.Collaborators.
+                    Where(collab => collab.UserID == collaborator.UserID && collab.NoteID == noteID).FirstOrDefault();
+                if (collaboratorsData != null)
+                {
+                    _context.Remove(collaboratorsData);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

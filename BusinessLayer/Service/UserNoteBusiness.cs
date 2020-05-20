@@ -111,5 +111,12 @@ namespace BusinessLayer.Service
             UserNoteResponseData data = _userNoteRepository.AddCollaborator(userID, noteID, collaborators);
             return data;
         }
+
+        public bool RemoveCollaborator(int userID, int noteID, CollaboratorRequest collaborator)
+        {
+            bool data = _userNoteRepository.RemoveCollaborator(userID, noteID, collaborator);
+            return data;
+        }
+
     }
 }

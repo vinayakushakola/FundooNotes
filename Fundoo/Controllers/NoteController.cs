@@ -552,6 +552,75 @@ namespace Fundoo.Controllers
         }
 
         /// <summary>
+        /// It is used to Add Collaborator to a Note
+        /// </summary>
+        /// <param name="noteID">NoteID</param>
+        /// <param name="collaborators">Collaborator ID</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{noteID}/Collaborator")]
+        public IActionResult AddCollaborator(int noteID, CollaboratorsRequest collaborators)
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userID = Convert.ToInt32(idClaim.Value);
+                UserNoteResponseData data = _userNoteBusiness.AddCollaborator(userID, noteID, collaborators);
+                if (data != null)
+                {
+                    success = true;
+                    message = "Collaborator Added Successfully";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "Try Again!";
+                    return Ok(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// It is used to remove collaborator
+        /// </summary>
+        /// <param name="noteID">NoteID</param>
+        /// <param name="collaborator">Collaborator ID</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{noteID}/RemoveCollaborator")]
+        public IActionResult RemoveCollaborator(int noteID, CollaboratorRequest collaborator)
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
+                int userID = Convert.ToInt32(idClaim.Value);
+                bool data = _userNoteBusiness.RemoveCollaborator(userID, noteID, collaborator);
+                if (data)
+                {
+                    success = true;
+                    message = "Collaborator Removed Successfully";
+                    return Ok(new { success, message });
+                }
+                else
+                {
+                    message = "Enter Proper Collaborator ID";
+                    return NotFound(new { success, message });
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+        /// <summary>
         /// It is used to Upload Image to Cloudinary
         /// </summary>
         /// <param name="imageFile"></param>
@@ -611,33 +680,6 @@ namespace Fundoo.Controllers
 
 
 
-        [HttpPut]
-        [Route("{noteID}/Collab")]
-        public IActionResult AddCollaborator(int noteID, CollaboratorsRequest collaborators)
-        {
-            try
-            {
-                bool success = false;
-                string message;
-                var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
-                int userID = Convert.ToInt32(idClaim.Value);
-                UserNoteResponseData data = _userNoteBusiness.AddCollaborator(userID, noteID, collaborators);
-                if (data != null)
-                {
-                    success = true;
-                    message = "Collaborator Added Successfully";
-                    return Ok(new { success, message, data });
-                }
-                else
-                {
-                    message = "Try Again!";
-                    return Ok(new { success, message });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-        }
+        
     }
 }

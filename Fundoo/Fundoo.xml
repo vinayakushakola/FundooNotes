@@ -137,6 +137,22 @@
             <param name="addLabelNote"></param>
             <returns></returns>
         </member>
+        <member name="M:Fundoo.Controllers.NoteController.AddCollaborator(System.Int32,CommonLayer.RequestModels.CollaboratorsRequest)">
+            <summary>
+            It is used to Add Collaborator to a Note
+            </summary>
+            <param name="noteID">NoteID</param>
+            <param name="collaborators">Collaborator ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Fundoo.Controllers.NoteController.RemoveCollaborator(System.Int32,CommonLayer.RequestModels.CollaboratorRequest)">
+            <summary>
+            It is used to remove collaborator
+            </summary>
+            <param name="noteID">NoteID</param>
+            <param name="collaborator">Collaborator ID</param>
+            <returns></returns>
+        </member>
         <member name="M:Fundoo.Controllers.NoteController.UploadImage(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             It is used to Upload Image to Cloudinary
