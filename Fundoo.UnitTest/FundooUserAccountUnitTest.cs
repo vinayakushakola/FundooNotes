@@ -34,9 +34,11 @@ namespace Fundoo.UnitTest
             var context = new AppDbContext(AppDbContext);
             _userRepository = new UserRepository(context);
             _userBusiness = new UserBusiness(_userRepository);
+            IConfigurationBuilder configuration = new ConfigurationBuilder();
 
+            configuration.AddJsonFile("appsettings.json");
+            _configuration = configuration.Build();
         }
-
 
         [Fact]
         public void SignUpUser_Return_OkResult()
@@ -64,6 +66,38 @@ namespace Fundoo.UnitTest
             var data = controller.CreateAccount(newUserData);
 
             Assert.IsType<BadRequestObjectResult>(data);
+        }
+
+
+        [Fact]
+        public void UserLogin_ValidLoginData_Return_OkResult()
+        {
+            var controller = new UserController(_userBusiness, _configuration);
+            var Logindata = new LoginRequest
+            {
+                Email = "abcd@gmail.com",
+                Password = "abcd1234"
+            };
+
+            var data = controller.UserLogin(Logindata);
+
+            Assert.IsType<OkObjectResult>(data);
+
+        }
+
+        [Fact]
+        public void UserLogin_InvalidLoginData_Return_NotFoundResult()
+        {
+            var controller = new UserController(_userBusiness, _configuration);
+            var Logindata = new LoginRequest
+            {
+                Email = "JohnCena@gmail.com",
+                Password = "123456789"
+            };
+
+            var data = controller.UserLogin(Logindata);
+
+            Assert.IsType<NotFoundObjectResult>(data);
         }
 
 

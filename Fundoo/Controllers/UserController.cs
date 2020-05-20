@@ -104,7 +104,7 @@ namespace Fundoo.Controllers
                 if (data == null)
                 {
                     message = "Enter Valid Email & Password";
-                    return Ok(new { success, message });
+                    return NotFound(new { success, message });
                 }
                 else
                 {
