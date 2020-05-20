@@ -479,17 +479,15 @@ namespace Fundoo.Controllers
             }
         }
 
-        
-
         /// <summary>
         /// It is used to Add Image
         /// </summary>
         /// <param name="noteID">NoteID</param>
-        /// <param name="imageRequest">Image url</param>
+        /// <param name="imageFile">Select Image</param>
         /// <returns></returns>
         [HttpPut]
         [Route("{noteID}/Image")]
-        public IActionResult AddImage(int noteID, ImageRequest imageRequest)
+        public IActionResult AddImage(int noteID, IFormFile imageFile)
         {
             try
             {
@@ -497,6 +495,11 @@ namespace Fundoo.Controllers
                 string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userID = Convert.ToInt32(idClaim.Value);
+                string image = UploadImageToCloud(imageFile);
+                ImageRequest imageRequest = new ImageRequest
+                {
+                    Image = image
+                };
                 bool data = _userNoteBusiness.AddImage(userID, noteID, imageRequest);
                 if (data)
                 {
@@ -620,40 +623,6 @@ namespace Fundoo.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
-        /// <summary>
-        /// It is used to Upload Image to Cloudinary
-        /// </summary>
-        /// <param name="imageFile"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("Image")]
-        public IActionResult UploadImage(IFormFile imageFile)
-        {
-            try
-            {
-                bool success = false;
-                string message;
-                string url = UploadImageToCloud(imageFile);
-                
-                if (url != null)
-                {
-                    success = true;
-                    message = "Image Successfully Uploaded to cloudinary";
-                    return Ok(new { success, message, url });
-                }
-                else
-                {
-                    message = "Image Not Found!";
-                    return Ok(new { success, message });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-        }
-
-
 
         private string UploadImageToCloud(IFormFile image)
         {
@@ -677,9 +646,5 @@ namespace Fundoo.Controllers
                 throw new Exception(ex.Message);
             }
         }
-
-
-
-        
     }
 }

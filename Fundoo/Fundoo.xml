@@ -121,12 +121,12 @@
             <param name="color">Color</param>
             <returns></returns>
         </member>
-        <member name="M:Fundoo.Controllers.NoteController.AddImage(System.Int32,CommonLayer.RequestModels.ImageRequest)">
+        <member name="M:Fundoo.Controllers.NoteController.AddImage(System.Int32,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             It is used to Add Image
             </summary>
             <param name="noteID">NoteID</param>
-            <param name="imageRequest">Image url</param>
+            <param name="imageFile">Select Image</param>
             <returns></returns>
         </member>
         <member name="M:Fundoo.Controllers.NoteController.AddLabelToANote(System.Int32,CommonLayer.RequestModels.AddLabelNoteRequest)">
@@ -151,13 +151,6 @@
             </summary>
             <param name="noteID">NoteID</param>
             <param name="collaborator">Collaborator ID</param>
-            <returns></returns>
-        </member>
-        <member name="M:Fundoo.Controllers.NoteController.UploadImage(Microsoft.AspNetCore.Http.IFormFile)">
-            <summary>
-            It is used to Upload Image to Cloudinary
-            </summary>
-            <param name="imageFile"></param>
             <returns></returns>
         </member>
         <member name="M:Fundoo.Controllers.UserController.GetUsersData">
