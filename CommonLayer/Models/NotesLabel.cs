@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,9 @@ namespace CommonLayer.Models
 
         [ForeignKey("LabelInfo")]
         public int LabelId { set; get; }
+
+        [DefaultValue(false)]
+        public bool IsDeleted { get; set; }
 
         public DateTime CreatedDate { set; get; }
 

@@ -26,7 +26,7 @@ namespace Fundoo.Controllers
         public NoteController(IUserNoteBusiness userNoteBusiness, IConfiguration config)
         {
             _userNoteBusiness = userNoteBusiness;
-            _config = config;    
+            _config = config;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Fundoo.Controllers
         /// <returns>If data found return 200Ok, else not found response or bad request</returns>
         [HttpPost]
         [Route("")]
-        public IActionResult CreateNote(UserNoteRequest userNoteData)
+        public IActionResult CreateNote([FromForm]UserNoteRequest userNoteData)
         {
             try
             {
@@ -605,7 +605,7 @@ namespace Fundoo.Controllers
                 string message;
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(id => id.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase));
                 int userID = Convert.ToInt32(idClaim.Value);
-                bool data = _userNoteBusiness.RemoveCollaborator(userID, noteID, collaborator);
+                bool data = _userNoteBusiness.RemoveCollaborator(noteID, collaborator);
                 if (data)
                 {
                     success = true;

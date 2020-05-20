@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CommonLayer.RequestModels
 {
@@ -10,8 +11,10 @@ namespace CommonLayer.RequestModels
 
         public string Description { set; get; }
 
+        [RegularExpression("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", ErrorMessage = "Enter Valid Color Code")]
         public string Color { set; get; }
 
+        [RegularExpression(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", ErrorMessage = "Enter a Valid URL")]
         public string Image { set; get; }
 
         [DefaultValue(false)]

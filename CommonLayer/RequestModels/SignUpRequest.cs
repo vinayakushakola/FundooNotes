@@ -13,11 +13,12 @@ namespace CommonLayer.RequestModels
         public string LastName { get; set; }
 
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Enter a valid Email Address")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [MinLength(8, ErrorMessage = "Your Password Should be Minimum Length of 8")]
         public string Password { get; set; }
     }
 }

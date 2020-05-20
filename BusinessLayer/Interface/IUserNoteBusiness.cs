@@ -38,6 +38,6 @@ namespace BusinessLayer.Interface
 
         UserNoteResponseData AddCollaborator(int userID, int noteID, CollaboratorsRequest collaborators);
 
-        bool RemoveCollaborator(int userID, int noteID, CollaboratorRequest collaborator);
+        bool RemoveCollaborator(int noteID, CollaboratorRequest collaborator);
     }
 }

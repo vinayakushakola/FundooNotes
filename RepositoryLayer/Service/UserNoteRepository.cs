@@ -5,6 +5,7 @@ using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 
 namespace RepositoryLayer.Service
@@ -17,7 +18,6 @@ namespace RepositoryLayer.Service
         {
             _context = context;
         }
-
 
         public UserNoteResponseData CreateNote(int userID, UserNoteRequest userNoteData)
         {
@@ -55,6 +55,8 @@ namespace RepositoryLayer.Service
                             {
                                 LabelId = labelRequest.LabelId,
                                 NotesId = userNote.NotesId,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
                             };
                             _context.NotesLabels.Add(data);
                             _context.SaveChanges();
@@ -118,7 +120,6 @@ namespace RepositoryLayer.Service
                     Collaborators = collabsData
                 };
 
-                
                 return noteResponseData;
             }
             catch(Exception ex)
@@ -259,7 +260,7 @@ namespace RepositoryLayer.Service
                     }).
                     ToList();
                 List<UserNoteResponseData> notes = _context.UserNotes.
-                    Where(uNote => uNote.UserId == userID).
+                    Where(uNote => uNote.UserId == userID && uNote.Archived != true && uNote.Trash != true).
                     Select(uNote => new UserNoteResponseData
                     {
                         NoteId = uNote.NotesId,
@@ -545,7 +546,9 @@ namespace RepositoryLayer.Service
                             var data = new NotesLabel
                             {
                                 LabelId = labelRequest.LabelId,
-                                NotesId = noteID
+                                NotesId = noteID,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
                             };
 
                             _context.NotesLabels.Add(data);
@@ -566,7 +569,6 @@ namespace RepositoryLayer.Service
                         {
                             LabelID = noteLabel.LabelId,
                             LabelName = label.LabelName,
-
                         }).
                         ToList();
 
@@ -598,24 +600,32 @@ namespace RepositoryLayer.Service
         {
             try
             {
-                var userNoteData = _context.UserNotes.
-                    Where(userNote => userNote.UserId == userID && userNote.NotesId == noteID).FirstOrDefault();
+                var notesinfo = _context.UserNotes.
+                    Where(userNote => userNote.UserId == userID && userNote.NotesId == noteID && userNote.NotesId == noteID).FirstOrDefault();
+                
                 foreach (CollaboratorRequest collaborator in collaborators.Collaborators)
                 {
-                    CollaboratorInfo userNotes = new CollaboratorInfo()
+                    var collaboratorsData = _context.Collaborators.
+                    Where(userCollab => userCollab.UserID == collaborator.UserID && userCollab.NoteID == noteID).
+                    FirstOrDefault();
+                    if (userID == collaborator.UserID || collaboratorsData != null)
                     {
-                        UserID = collaborator.UserID,
-                        NoteID = noteID,
-                        CreatedDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now,
-                    };
-                    _context.Collaborators.Add(userNotes);
-                    _context.SaveChanges();
+                        return null;
+                    }
+                    else
+                    {
+                        CollaboratorInfo userNotes = new CollaboratorInfo()
+                        {
+                            UserID = collaborator.UserID,
+                            NoteID = noteID,
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now,
+                        };
+                        _context.Collaborators.Add(userNotes);
+                        _context.SaveChanges();
+                    }
                 }
 
-                var notesinfo = _context.UserNotes.
-                    Where(note => note.NotesId == noteID && note.UserId == userID).
-                    First<UserNotesInfo>();
                 List<LabelResponseData> labelsData = _context.NotesLabels.
                         Where(note => note.NotesId == notesinfo.NotesId).
                         Join(_context.Labels,
@@ -631,12 +641,12 @@ namespace RepositoryLayer.Service
                 List<CollaboratorResponseData> collabsData = _context.Collaborators.
                         Where(noted => noted.NoteID == noteID).
                         Join(_context.Users,
-                        noteLabel => noteLabel.UserID,
-                        label => label.ID,
-                        (noteLabel, label) => new CollaboratorResponseData
+                        noteCollab => noteCollab.UserID,
+                        collab => collab.ID,
+                        (noteCollab, collab) => new CollaboratorResponseData
                         {
-                            UserID = noteLabel.UserID,
-                            Email = label.Email
+                            UserID = noteCollab.UserID,
+                            Email = collab.Email
                         }).
                         ToList();
 
@@ -662,7 +672,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public bool RemoveCollaborator(int userID, int noteID, CollaboratorRequest collaborator)
+        public bool RemoveCollaborator(int noteID, CollaboratorRequest collaborator)
         {
             try
             {

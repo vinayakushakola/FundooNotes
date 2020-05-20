@@ -19,8 +19,10 @@ namespace CommonLayer.Models
 
         public string Description { get; set; }
 
+        [RegularExpression("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", ErrorMessage = "Enter Valid Color Code")]
         public string Color { get; set; }
 
+        [RegularExpression(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$", ErrorMessage = "Enter valid URL")]
         public string Image { get; set; }
 
         [DefaultValue(false)]
