@@ -195,13 +195,6 @@
             <param name="profilePic">Profile Pic</param>
             <returns></returns>
         </member>
-        <member name="M:Fundoo.Controllers.UserController.SendMail(CommonLayer.RequestModels.ForgotPasswordRequest,System.String)">
-            <summary>
-            It is used for sending mail to the user
-            </summary>
-            <param name="forgotPassword">Email</param>
-            <param name="jsonToken">token</param>
-        </member>
         <member name="M:Fundoo.Controllers.UserController.CreateToken(CommonLayer.ResponseModels.ResponseData,System.String)">
             <summary>
             It Create Token

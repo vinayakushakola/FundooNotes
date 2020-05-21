@@ -1,8 +1,10 @@
 ﻿using BusinessLayer.Interface;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
+using Experimental.System.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -147,7 +149,7 @@ namespace Fundoo.Controllers
                     success = true;
                     jsonToken = CreateToken(data, "ForgotPassword");
 
-                    SendMail(forgotPassword, jsonToken);
+                    MSMQSender.SendToMSMQ(forgotPassword.Email, jsonToken);
 
                     userFullName = data.FirstName + " " + data.LastName;
                     message = "The mail has been sent to " + forgotPassword.Email + " Successfully";
@@ -231,27 +233,27 @@ namespace Fundoo.Controllers
             }
         }
 
-        /// <summary>
-        /// It is used for sending mail to the user
-        /// </summary>
-        /// <param name="forgotPassword">Email</param>
-        /// <param name="jsonToken">token</param>
-        private void SendMail(ForgotPasswordRequest forgotPassword, string jsonToken)
-        {
-            MailMessage mail = new MailMessage();
-            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+        ///// <summary>
+        ///// It is used for sending mail to the user
+        ///// </summary>
+        ///// <param name="forgotPassword">Email</param>
+        ///// <param name="jsonToken">token</param>
+        //private void SendMail(ForgotPasswordRequest forgotPassword, string jsonToken)
+        //{
+        //    MailMessage mail = new MailMessage();
+        //    SmtpClient smtpserver = new SmtpClient("smtp.gmail.com");
 
-            mail.From = new MailAddress("vinayak.mailtesting@gmail.com");
-            mail.To.Add(forgotPassword.Email);
-            mail.Subject = "Reset Password";
-            mail.Body = "Hi, You Requested for password reset! \n\nUse this token for Password reset!\n\nToken: " + jsonToken;
+        //    mail.From = new MailAddress("vinayak.mailtesting@gmail.com");
+        //    mail.To.Add(forgotPassword.Email);
+        //    mail.Subject = "reset password";
+        //    mail.Body = "hi, you requested for password reset! \n\nuse this token for password reset!\n\ntoken: " + jsonToken;
 
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");
-            SmtpServer.EnableSsl = true;
+        //    smtpserver.Port = 587;
+        //    smtpserver.Credentials = new System.Net.NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");
+        //    smtpserver.EnableSsl = true;
 
-            SmtpServer.Send(mail);
-        }
+        //    smtpserver.Send(mail);
+        //}
 
         /// <summary>
         /// It Create Token
