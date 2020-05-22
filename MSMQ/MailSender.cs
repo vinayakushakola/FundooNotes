@@ -3,7 +3,7 @@ using System.Net.Mail;
 
 namespace MSMQ
 {
-    public class Mail
+    public class MailSender
     {
         public static bool SendMail(string email, string token)
         {

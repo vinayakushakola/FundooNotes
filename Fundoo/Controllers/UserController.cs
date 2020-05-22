@@ -28,9 +28,6 @@ namespace Fundoo.Controllers
 
         private readonly IConfiguration _config;
 
-        private static string _login = "login";
-
-
         public UserController(IUserBusiness signUpBusiness, IConfiguration config)
         {
             _userBusiness = signUpBusiness;
@@ -113,7 +110,7 @@ namespace Fundoo.Controllers
                     success = true;
                     userFullName = data.FirstName + " " + data.LastName;
                     message = "Hello " + userFullName + ", You Logged in Successfully";
-                    jsonToken = CreateToken(data, _login);
+                    jsonToken = CreateToken(data, "login");
                     return Ok(new { success, message, data, jsonToken });
                 }
             }
@@ -150,6 +147,7 @@ namespace Fundoo.Controllers
                     jsonToken = CreateToken(data, "ForgotPassword");
 
                     MSMQSender.SendToMSMQ(forgotPassword.Email, jsonToken);
+                    SendMail(forgotPassword, jsonToken);
 
                     userFullName = data.FirstName + " " + data.LastName;
                     message = "The mail has been sent to " + forgotPassword.Email + " Successfully";
@@ -201,12 +199,11 @@ namespace Fundoo.Controllers
         /// <summary>
         /// It is used for Uploading Profile Picture
         /// </summary>
-        /// <param name="userID">UserID</param>
         /// <param name="profilePic">Profile Pic</param>
         /// <returns></returns>
         [HttpPut]
-        [Route("{userID}/ProfilePic")]
-        public IActionResult AddProfilePic(int userID, ProfilePicRequest profilePic)
+        [Route("ProfilePic")]
+        public IActionResult AddProfilePic(ProfilePicRequest profilePic)
         {
             try
             {
@@ -233,27 +230,27 @@ namespace Fundoo.Controllers
             }
         }
 
-        ///// <summary>
-        ///// It is used for sending mail to the user
-        ///// </summary>
-        ///// <param name="forgotPassword">Email</param>
-        ///// <param name="jsonToken">token</param>
-        //private void SendMail(ForgotPasswordRequest forgotPassword, string jsonToken)
-        //{
-        //    MailMessage mail = new MailMessage();
-        //    SmtpClient smtpserver = new SmtpClient("smtp.gmail.com");
+        /// <summary>
+        /// It is used for sending mail to the user
+        /// </summary>
+        /// <param name="forgotPassword">Email</param>
+        /// <param name="jsonToken">token</param>
+        private void SendMail(ForgotPasswordRequest forgotPassword, string jsonToken)
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient smtpserver = new SmtpClient("smtp.gmail.com");
 
-        //    mail.From = new MailAddress("vinayak.mailtesting@gmail.com");
-        //    mail.To.Add(forgotPassword.Email);
-        //    mail.Subject = "reset password";
-        //    mail.Body = "hi, you requested for password reset! \n\nuse this token for password reset!\n\ntoken: " + jsonToken;
+            mail.From = new MailAddress("vinayak.mailtesting@gmail.com");
+            mail.To.Add(forgotPassword.Email);
+            mail.Subject = "reset password";
+            mail.Body = "hi, you requested for password reset! \n\nuse this token for password reset!\n\ntoken: " + jsonToken;
 
-        //    smtpserver.Port = 587;
-        //    smtpserver.Credentials = new System.Net.NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");
-        //    smtpserver.EnableSsl = true;
+            smtpserver.Port = 587;
+            smtpserver.Credentials = new System.Net.NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");
+            smtpserver.EnableSsl = true;
 
-        //    smtpserver.Send(mail);
-        //}
+            smtpserver.Send(mail);
+        }
 
         /// <summary>
         /// It Create Token
@@ -269,10 +266,12 @@ namespace Fundoo.Controllers
 
                 var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
 
-                var claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Role, type));
-                claims.Add(new Claim("ID", responseData.ID.ToString()));
-                claims.Add(new Claim("Email", responseData.Email.ToString()));
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Role, type),
+                    new Claim("ID", responseData.ID.ToString()),
+                    new Claim("Email", responseData.Email.ToString())
+                };
 
                 var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                     _config["Jwt:Issuer"],
