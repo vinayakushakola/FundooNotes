@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis.Extensions.Core.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,10 +29,45 @@ namespace Fundoo.Controllers
 
         private readonly IConfiguration _config;
 
-        public UserController(IUserBusiness signUpBusiness, IConfiguration config)
+        private readonly IRedisCacheClient _redis;
+
+        public UserController(IUserBusiness signUpBusiness, IConfiguration config, IRedisCacheClient redis)
         {
             _userBusiness = signUpBusiness;
             _config = config;
+            _redis = redis;
+        }
+
+        /// <summary>
+        /// It is used to show RedisCacheData
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("CacheData")]
+        public ActionResult<IEnumerable<ResponseData>> GetUsersCacheData()
+        {
+            try
+            {
+                bool success = false;
+                string message;
+                var userData = _redis.Db0.GetAll<ResponseData>(new string[] { "data:key" });
+                var data = userData.Values.ToList();
+                if (data != null)
+                {
+                    success = true;
+                    message = "User Data fetched successsfully";
+                    return Ok(new { success, message, data });
+                }
+                else
+                {
+                    message = "No Data Present!";
+                    return NotFound(new { success, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
         /// <summary>
@@ -64,11 +100,12 @@ namespace Fundoo.Controllers
             try
             {
                 ResponseData data = _userBusiness.CreateAccount(signUpRequest);
+                //var redisData = _redis.Db0.Add("data:key", data, DateTimeOffset.Now.AddMinutes(10));
                 bool success = false;
                 string message, userFullName;
                 if (data == null)
                 {
-                    message = "Enter Valid Details!";
+                    message = "EmailID already exists!";
                     return Ok(new { success, message });
                 }
                 else

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Service;
+using StackExchange.Redis.Extensions.Core.Abstractions;
 using System;
 using Xunit;
 
@@ -18,6 +19,8 @@ namespace Fundoo.UnitTest
         private readonly IUserBusiness _userBusiness;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IRedisCacheClient _redis;
+
 
         public static DbContextOptions<AppDbContext> AppDbContext { get; }
 
@@ -34,6 +37,7 @@ namespace Fundoo.UnitTest
             var context = new AppDbContext(AppDbContext);
             _userRepository = new UserRepository(context);
             _userBusiness = new UserBusiness(_userRepository);
+
             IConfigurationBuilder configuration = new ConfigurationBuilder();
 
             configuration.AddJsonFile("appsettings.json");
@@ -43,7 +47,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void SignUpUser_Return_OkResult()
         {
-            var controller = new UserController(_userBusiness, _configuration);
+            var controller = new UserController(_userBusiness, _configuration, _redis);
             var newUserData = new SignUpRequest
             {
                 FirstName = "Abcd",
@@ -60,7 +64,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void SignUpUser_NoData_Return_BadRequest()
         {
-            var controller = new UserController(_userBusiness, _configuration);
+            var controller = new UserController(_userBusiness, _configuration, _redis);
             SignUpRequest newUserData = null;
 
             var data = controller.CreateAccount(newUserData);
@@ -72,7 +76,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void UserLogin_ValidLoginData_Return_OkResult()
         {
-            var controller = new UserController(_userBusiness, _configuration);
+            var controller = new UserController(_userBusiness, _configuration, _redis);
             var Logindata = new LoginRequest
             {
                 Email = "abcd@gmail.com",
@@ -88,7 +92,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void UserLogin_InvalidLoginData_Return_NotFoundResult()
         {
-            var controller = new UserController(_userBusiness, _configuration);
+            var controller = new UserController(_userBusiness, _configuration, _redis);
             var Logindata = new LoginRequest
             {
                 Email = "JohnCena@gmail.com",
@@ -104,7 +108,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void ForgotPassword_ValidEmailData_Return_OkResult()
         {
-            var controller = new UserController(_userBusiness, _configuration);
+            var controller = new UserController(_userBusiness, _configuration, _redis);
             var email = new ForgotPasswordRequest
             {
                 Email = "SamKhan2@gmail.com"
@@ -119,7 +123,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void ForgotPassword_NoData_Return_BadRequest()
         {
-            var controller = new UserController(_userBusiness, _configuration);
+            var controller = new UserController(_userBusiness, _configuration, _redis);
             ForgotPasswordRequest forgotPassword = null;
 
             var data = controller.ForgotPassword(forgotPassword);
@@ -131,7 +135,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void ResetPassword_NoData_Return_BadRequest()
         {
-            var controller = new UserController(_userBusiness, _configuration);
+            var controller = new UserController(_userBusiness, _configuration, _redis);
             ResetPasswordRequest resetPassword = null;
 
             var data = controller.ResetPassword(resetPassword);
@@ -142,7 +146,7 @@ namespace Fundoo.UnitTest
         [Fact]
         public void GetAllUsersData_ReturnOkResult()
         {
-            var userController = new UserController(_userBusiness, _configuration);
+            var userController = new UserController(_userBusiness, _configuration, _redis);
 
             //Act
             var OkResult = userController.GetUsersData();

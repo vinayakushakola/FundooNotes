@@ -12,6 +12,9 @@ using Microsoft.OpenApi.Models;
 using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Service;
+using StackExchange.Redis.Extensions.Core.Abstractions;
+using StackExchange.Redis.Extensions.Core.Configuration;
+using StackExchange.Redis.Extensions.Core.Implementations;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
@@ -50,6 +53,14 @@ namespace Fundoo
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("FundooNotesDBConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var redisConfiguration = Configuration.GetSection("Redis").Get<RedisConfiguration>();
+            services.AddSingleton(redisConfiguration);
+            services.AddSingleton<IRedisCacheClient, RedisCacheClient>();
+            services.AddSingleton<IRedisCacheConnectionPoolManager, RedisCacheConnectionPoolManager>();
+            services.AddSingleton<IRedisDefaultCacheClient, RedisDefaultCacheClient>();
+            services.AddSingleton<StackExchange.Redis.Extensions.Core.ISerializer, StackExchange.Redis.Extensions.MsgPack.MsgPackObjectSerializer>();
+
 
             services.AddSwaggerGen(c =>
             {

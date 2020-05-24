@@ -153,6 +153,12 @@
             <param name="collaborator">Collaborator ID</param>
             <returns></returns>
         </member>
+        <member name="M:Fundoo.Controllers.UserController.GetUsersCacheData">
+            <summary>
+            It is used to show RedisCacheData
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Fundoo.Controllers.UserController.GetUsersData">
             <summary>
             It shows all Register users

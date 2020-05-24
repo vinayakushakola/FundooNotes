@@ -11,6 +11,13 @@ namespace RepositoryLayer.ApplicationDbContext
 
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<UserInfo>()
+                .HasIndex(user => user.Email)
+                .IsUnique();
+        }
+
         public DbSet<UserInfo> Users { get; set; }
 
         public DbSet<UserNotesInfo> UserNotes { get; set; }

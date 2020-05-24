@@ -1,10 +1,14 @@
 ﻿using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using CommonLayer.ResponseModels;
+using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.ApplicationDbContext;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace RepositoryLayer.Service
@@ -74,28 +78,36 @@ namespace RepositoryLayer.Service
             {
                 string encryptedPassword = EncryptionDecryption.Encryption(userSignUp.Password);
 
-                UserInfo user = new UserInfo()
+                var checkUsers = _context.Users.
+                    Where(existedUser => existedUser.Email == userSignUp.Email).
+                    FirstOrDefault();
+                if (checkUsers == null)
                 {
-                    FirstName = userSignUp.FirstName,
-                    LastName = userSignUp.LastName,
-                    Email = userSignUp.Email,
-                    Password = encryptedPassword,
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now
-                };
-                _context.Users.Add(user);
-                _context.SaveChanges();
-
-                ResponseData responseData = new ResponseData()
+                    UserInfo user = new UserInfo()
+                    {
+                        FirstName = userSignUp.FirstName,
+                        LastName = userSignUp.LastName,
+                        Email = userSignUp.Email,
+                        Password = encryptedPassword,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
+                    };
+                    _context.Users.Add(user);
+                    _context.SaveChanges();
+                    ResponseData responseData = new ResponseData()
+                    {
+                        ID = user.ID,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        ProfilePic = user.ProfilePic,
+                        Email = user.Email
+                    };
+                    return responseData;
+                }
+                else
                 {
-                    ID = user.ID,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    ProfilePic = user.ProfilePic,
-                    Email = user.Email
-                };
-                return responseData;
-
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -131,7 +143,6 @@ namespace RepositoryLayer.Service
                 throw new Exception(ex.Message);
             }
         }
-
 
         public ResponseData AddProfilePic(int userID, ProfilePicRequest profilePic)
         {
