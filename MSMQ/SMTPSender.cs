@@ -3,7 +3,7 @@ using System.Net.Mail;
 
 namespace MSMQ
 {
-    public class MailSender
+    public class SMTPSender
     {
         public static bool SendMail(string email, string token)
         {
@@ -13,7 +13,7 @@ namespace MSMQ
             mailMessage.From = new MailAddress("vinayak.mailtesting@gmail.com");
             mailMessage.To.Add(email);
             mailMessage.Subject = "Reset Password";
-            mailMessage.Body = token;
+            mailMessage.Body = "hi, you requested for password reset! \n\nuse this token for password reset!\n\n "+ token;
 
             smtpserver.Port = 587;
             smtpserver.Credentials = new NetworkCredential("vinayak.mailtesting@gmail.com", "@bcd.1234");

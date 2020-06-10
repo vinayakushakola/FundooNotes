@@ -6,7 +6,7 @@ namespace CommonLayer.Models
     {
         public static void SendToMSMQ(string email, string token)
         {
-            string path = @".\Private$\FundooNotesMsmq";
+            string path = @".\Private$\FundooNotesQueue";
             MessageQueue messageQueue = null;
             if (MessageQueue.Exists(path))
             {

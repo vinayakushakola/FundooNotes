@@ -183,8 +183,7 @@ namespace Fundoo.Controllers
                     success = true;
                     jsonToken = CreateToken(data, "ForgotPassword");
 
-                    MSMQSender.SendToMSMQ(forgotPassword.Email, jsonToken);
-                    SendMail(forgotPassword, jsonToken);
+                    MSMQSender.SendToMSMQ(data.Email, jsonToken);
 
                     userFullName = data.FirstName + " " + data.LastName;
                     message = "The mail has been sent to " + forgotPassword.Email + " Successfully";
